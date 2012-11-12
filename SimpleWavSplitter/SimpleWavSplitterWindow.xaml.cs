@@ -1,21 +1,25 @@
-﻿using System;
-using System.Linq;
-/*
+﻿/*
  * SimpleWavSplitter
  * Copyright © Wiesław Šoltés 2010-2012. All Rights Reserved
  */
-using System.Windows;
-using System.ComponentModel;
 
 namespace SimpleWavSplitter
 {
-    /// <summary>
-    /// Interaction logic for SimpleWavSplitterWindow.xaml
-    /// </summary>
+    #region References
+
+    using System;
+    using System.Linq;
+    using System.Windows;
+    using System.ComponentModel;
+
+    #endregion
+
+    #region SimpleWavSplitterWindow
+
     public partial class SimpleWavSplitterWindow : Window
     {
         /// <summary>
-        /// 
+        /// SimpleWavSplitterWindow Constructor
         /// </summary>
         public SimpleWavSplitterWindow()
         {
@@ -67,28 +71,21 @@ namespace SimpleWavSplitter
                     // parse WAV file header
                     try
                     {
-                        System.IO.FileStream f = null;
-                        WavFileHeader h = new WavFileHeader();
-
                         // create WAV file stream
-                        f = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                        using (System.IO.FileStream f = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                        {
+                            // read WAV file header
+                            WavFileHeader h = WavFile.ReadFileHeader(f);
 
-                        // read WAV file header
-                        h = WavFile.ReadFileHeader(f);
-
-                        // show WAV header
-                        MessageBox.Show(
-                            "FileName:\t\t" + System.IO.Path.GetFileName(fileName) + "\n" +
-                            "FileSize:\t\t" + f.Length.ToString() + "\n\n" +
-                            h.ToString(),
-                            "WAV Info",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.None
-                            );
-
-                        // close input file
-                        f.Close();
-                        f.Dispose();
+                            // show WAV header
+                            MessageBox.Show(
+                                "FileName:\t\t" + System.IO.Path.GetFileName(fileName) + "\n" +
+                                "FileSize:\t\t" + f.Length.ToString() + "\n\n" +
+                                h.ToString(),
+                                "WAV Info",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.None);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -319,4 +316,6 @@ namespace SimpleWavSplitter
             progress.Value = 0;
         }
     }
+
+    #endregion
 }

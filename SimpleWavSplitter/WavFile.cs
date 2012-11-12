@@ -2,13 +2,20 @@
  * SimpleWavSplitter
  * Copyright © Wiesław Šoltés 2010-2012. All Rights Reserved
  */
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace SimpleWavSplitter
 {
+    #region References
+
+    using System;
+    using System.Text;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+
+    #endregion
+
+    #region Documentation
+
     /* http://msdn.microsoft.com/en-us/library/dd757720(v=VS.85).aspx
 
     typedef struct
@@ -83,46 +90,6 @@ namespace SimpleWavSplitter
         18. Top Back Right - TBR
     */
 
-    public enum WavChannelMask
-    {
-        SPEAKER_FRONT_LEFT = 0x1,
-        SPEAKER_FRONT_RIGHT = 0x2,
-        SPEAKER_FRONT_CENTER = 0x4,
-        SPEAKER_LOW_FREQUENCY = 0x8,
-        SPEAKER_BACK_LEFT = 0x10,
-        SPEAKER_BACK_RIGHT = 0x20,
-        SPEAKER_FRONT_LEFT_OF_CENTER = 0x40,
-        SPEAKER_FRONT_RIGHT_OF_CENTER = 0x80,
-        SPEAKER_BACK_CENTER = 0x100,
-        SPEAKER_SIDE_LEFT = 0x200,
-        SPEAKER_SIDE_RIGHT = 0x400,
-        SPEAKER_TOP_CENTER = 0x800,
-        SPEAKER_TOP_FRONT_LEFT = 0x1000,
-        SPEAKER_TOP_FRONT_CENTER = 0x2000,
-        SPEAKER_TOP_FRONT_RIGHT = 0x4000,
-        SPEAKER_TOP_BACK_LEFT = 0x8000,
-        SPEAKER_TOP_BACK_CENTER = 0x10000,
-        SPEAKER_TOP_BACK_RIGHT = 0x20000
-    }
-
-    public struct WavChannel
-    {
-        private readonly string _longName;
-        private readonly string _shortName;
-        private readonly WavChannelMask _mask;
-
-        public WavChannel(string longName, string shortName, WavChannelMask mask)
-        {
-            _longName = longName;
-            _shortName = shortName;
-            _mask = mask;
-        }
-
-        public string LongName { get { return _longName; } }
-        public string ShortName { get { return _shortName; } }
-        public WavChannelMask Mask { get { return _mask; } }
-    }
-
     /*
     The canonical WAVE format starts with the RIFF header:
 
@@ -170,6 +137,58 @@ namespace SimpleWavSplitter
                                     number.
     44        *   Data             The actual sound data.
     */
+
+    #endregion
+
+    #region WavChannelMask
+
+    public enum WavChannelMask
+    {
+        SPEAKER_FRONT_LEFT = 0x1,
+        SPEAKER_FRONT_RIGHT = 0x2,
+        SPEAKER_FRONT_CENTER = 0x4,
+        SPEAKER_LOW_FREQUENCY = 0x8,
+        SPEAKER_BACK_LEFT = 0x10,
+        SPEAKER_BACK_RIGHT = 0x20,
+        SPEAKER_FRONT_LEFT_OF_CENTER = 0x40,
+        SPEAKER_FRONT_RIGHT_OF_CENTER = 0x80,
+        SPEAKER_BACK_CENTER = 0x100,
+        SPEAKER_SIDE_LEFT = 0x200,
+        SPEAKER_SIDE_RIGHT = 0x400,
+        SPEAKER_TOP_CENTER = 0x800,
+        SPEAKER_TOP_FRONT_LEFT = 0x1000,
+        SPEAKER_TOP_FRONT_CENTER = 0x2000,
+        SPEAKER_TOP_FRONT_RIGHT = 0x4000,
+        SPEAKER_TOP_BACK_LEFT = 0x8000,
+        SPEAKER_TOP_BACK_CENTER = 0x10000,
+        SPEAKER_TOP_BACK_RIGHT = 0x20000
+    }
+
+    #endregion
+
+    #region WavChannel
+
+    public struct WavChannel
+    {
+        private readonly string _longName;
+        private readonly string _shortName;
+        private readonly WavChannelMask _mask;
+
+        public WavChannel(string longName, string shortName, WavChannelMask mask)
+        {
+            _longName = longName;
+            _shortName = shortName;
+            _mask = mask;
+        }
+
+        public string LongName { get { return _longName; } }
+        public string ShortName { get { return _shortName; } }
+        public WavChannelMask Mask { get { return _mask; } }
+    }
+
+    #endregion
+
+    #region WavFileHeader
 
     /// <summary>
     /// The canonical WAVE format starts with the RIFF header
@@ -315,6 +334,10 @@ namespace SimpleWavSplitter
                 TotalSamples);
         }
     }
+
+    #endregion
+
+    #region WavFile
 
     public class WavFile
     {
@@ -534,4 +557,6 @@ namespace SimpleWavSplitter
             return monoFileHeader;
         }
     }
+
+    #endregion
 }
