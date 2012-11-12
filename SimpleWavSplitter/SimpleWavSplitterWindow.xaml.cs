@@ -18,6 +18,8 @@ namespace SimpleWavSplitter
 
     public partial class SimpleWavSplitterWindow : Window
     {
+        #region Constructor
+
         /// <summary>
         /// SimpleWavSplitterWindow Constructor
         /// </summary>
@@ -27,30 +29,18 @@ namespace SimpleWavSplitter
             this.Title = "SimpleWavSplitter v0.0.2";
         }
 
-        /// <summary>
-        /// Store splitter work results stats
-        /// </summary>
-        public struct SplitWorkResult
-        {
-            public TimeSpan t;
-            public WavFileHeader h;
-            public long countBytes;
-        }
+        #endregion
+
+        #region Worker
 
         /// <summary>
         /// Using the BackgroundWorker to run jobs in background
         /// </summary>
-        BackgroundWorker worker;
-        public delegate void UpdateSplitProgressDelegate(double currentProgress);
+        private BackgroundWorker worker;
 
-        /// <summary>
-        /// Update progress bar for WAV spliter
-        /// </summary>
-        /// <param name="progress"></param>
-        public void UpdateSplitProgress(double currentProgress)
-        {
-            progress.Value = currentProgress;
-        }
+        #endregion
+
+        #region Button Events
 
         /// <summary>
         /// Get WAV file header.
@@ -58,6 +48,35 @@ namespace SimpleWavSplitter
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnGetWavHeader_Click(object sender, RoutedEventArgs e)
+        {
+            GetWavHeader();
+        }
+
+        /// <summary>
+        /// Split multi-channel WAV files into multiple mono WAV files.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSplitWavFiles_Click(object sender, RoutedEventArgs e)
+        {
+            SplitWavFiles();
+        }
+
+        /// <summary>
+        /// Cancel current worker.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            CancelSplitWorker();
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static void GetWavHeader()
         {
             Microsoft.Win32.OpenFileDialog d = new Microsoft.Win32.OpenFileDialog();
             d.Filter = "WAV Files (*.wav)|*.wav|All Files (*.*)|*.*";
@@ -95,26 +114,22 @@ namespace SimpleWavSplitter
             }
         }
 
-        /// <summary>
-        /// Split multi-channel WAV files into multiple mono WAV files
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSplitWavFiles_Click(object sender, RoutedEventArgs e)
+        private void SplitWavFiles()
         {
-            Microsoft.Win32.OpenFileDialog d = new Microsoft.Win32.OpenFileDialog();
-            d.Filter = "WAV Files (*.wav)|*.wav|All Files (*.*)|*.*";
-            d.FilterIndex = 0;
-            d.Multiselect = true;
-            if (d.ShowDialog() == true)
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.Filter = "WAV Files (*.wav)|*.wav|All Files (*.*)|*.*";
+            dlg.FilterIndex = 0;
+            dlg.Multiselect = true;
+            if (dlg.ShowDialog() == true)
             {
                 // reset window controls to defaults
                 progress.Value = 0;
 
                 // create background worker
-                System.Windows.Threading.Dispatcher dispatcher = this.Dispatcher;
                 worker = new BackgroundWorker();
                 worker.WorkerSupportsCancellation = true;
+
+                string dlgFileName = string.Copy(dlg.FileName);
 
                 worker.DoWork += (s, args) =>
                 {
@@ -124,30 +139,31 @@ namespace SimpleWavSplitter
 
                     sw.Start();
 
-                    foreach(string fileName in fileNames)
+                    foreach (string fileName in fileNames)
                     {
-                        UpdateSplitProgressDelegate updateSplitProgress = new UpdateSplitProgressDelegate(UpdateSplitProgress);
-                        dispatcher.BeginInvoke(updateSplitProgress, 0);
+                        Dispatcher.Invoke((Action)delegate()
+                        {
+                            progress.Value = 0;
+                        });
 
                         // parse WAV file header
                         try
                         {
                             System.IO.FileStream f = null;
-                            WavFileHeader h = new WavFileHeader();
                             long countBytes = 0;
 
                             // create WAV file stream
                             f = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
 
                             // read WAV file header
-                            h = WavFile.ReadFileHeader(f);
+                            WavFileHeader h = WavFile.ReadFileHeader(f);
                             countBytes += h.HeaderSize;
                             countBytesTotal += h.HeaderSize;
 
                             //MessageBox.Show(h.ToString());
 
                             // create output filenames
-                            string filePath = d.FileName.Remove(fileName.Length - System.IO.Path.GetFileName(fileName).Length);
+                            string filePath = dlgFileName.Remove(fileName.Length - System.IO.Path.GetFileName(fileName).Length);
                             string fileNameOnly = System.IO.Path.GetFileNameWithoutExtension(fileName);
                             string[] outputFileNames = new string[h.NumChannels];
                             WavChannel[] channels = new WavChannel[h.NumChannels];
@@ -249,7 +265,11 @@ namespace SimpleWavSplitter
                                     // update progress bar
                                     countBytes += n;
                                     countBytesTotal += n;
-                                    dispatcher.BeginInvoke(updateSplitProgress, ((double)countBytes / (double)f.Length) * 100);
+
+                                    Dispatcher.Invoke((Action)delegate()
+                                    {
+                                        progress.Value = ((double)countBytes / (double)f.Length) * 100;
+                                    });
                                 }
                             }
 
@@ -272,49 +292,43 @@ namespace SimpleWavSplitter
 
                     sw.Stop();
 
-                    // prepare result
-                    SplitWorkResult result = new SplitWorkResult();
-                    result.t = sw.Elapsed;
-                    result.countBytes = countBytesTotal;
-
-                    args.Result = result;
+                    args.Result = new Tuple<TimeSpan,long>(sw.Elapsed, countBytesTotal);
                 };
 
-                worker.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
+                worker.RunWorkerCompleted += (s, args) =>
                 {
                     if (args.Cancelled == false)
                     {
-                        SplitWorkResult result = (SplitWorkResult)args.Result;
+                        //SplitWorkResult result = (SplitWorkResult)args.Result;
+                        Tuple<TimeSpan,long> result = (Tuple<TimeSpan,long>)args.Result;
+
+                        string stats = string.Format("Total data bytes processed: {0} ({1} MB)\nTotal elapsed time: {2}",
+                            result.Item2,
+                            Math.Round((double)result.Item2 / (1024 * 1024), 1),
+                            result.Item1);
 
                         // show statistics to user
-                        MessageBox.Show(
-                            "Total data bytes processed: " +
-                            result.countBytes.ToString() +
-                            " (" +
-                            Math.Round((double)result.countBytes / (1024 * 1024), 1).ToString() +
-                            " MB)" +
-                            "\nTotal elapsed time: " + result.t.ToString(),
-                            "Done",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
+                        MessageBox.Show(stats, "Done", MessageBoxButton.OK,  MessageBoxImage.Information);
                     }
                     else
                     {
-                        UpdateSplitProgress(0);
+                        progress.Value = 0;
                     }
                 };
 
-                worker.RunWorkerAsync(d.FileNames);
+                worker.RunWorkerAsync(dlg.FileNames);
             }
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void CancelSplitWorker()
         {
             if (worker != null)
                 worker.CancelAsync();
 
             progress.Value = 0;
         }
+
+        #endregion
     }
 
     #endregion
