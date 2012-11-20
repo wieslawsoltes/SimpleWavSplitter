@@ -23,11 +23,12 @@ namespace WavFile
         /// <returns></returns>
         public static WavFileHeader ReadFileHeader(System.IO.FileStream f)
         {
-            WavFileHeader h = new WavFileHeader();
+            var h = new WavFileHeader();
+
             h.HeaderSize = 0;
 
             // read WAV header
-            System.IO.BinaryReader b = new System.IO.BinaryReader(f);
+            var b = new System.IO.BinaryReader(f);
 
             // WAVE
             h.ChunkID = b.ReadUInt32();         // 0x46464952, "RIFF"
@@ -148,7 +149,7 @@ namespace WavFile
         public static void WriteFileHeader(System.IO.FileStream f, WavFileHeader h)
         {
             // write WAV header
-            System.IO.BinaryWriter b = new System.IO.BinaryWriter(f);
+            var b = new System.IO.BinaryWriter(f);
 
             // WAVE
             b.Write((UInt32)0x46464952); // 0x46464952, "RIFF"
@@ -197,42 +198,40 @@ namespace WavFile
         public static WavFileHeader GetMonoWavFileHeader(WavFileHeader h)
         {
             // each mono output file has the same header
-            WavFileHeader monoFileHeader = new WavFileHeader();
+            var mh = new WavFileHeader();
 
             // WAVE
-            monoFileHeader.ChunkID = (UInt32)0x46464952; // 0x46464952, "RIFF"
-            monoFileHeader.ChunkSize = 36 + (h.Subchunk2Size / h.NumChannels); // 36 + SubChunk2Size, 4 + (8 + SubChunk1Size) + (8 + SubChunk2Size)
-            monoFileHeader.Format = (UInt32)0x45564157; // 0x45564157, "WAVE"
+            mh.ChunkID = (UInt32)0x46464952; // 0x46464952, "RIFF"
+            mh.ChunkSize = 36 + (h.Subchunk2Size / h.NumChannels); // 36 + SubChunk2Size, 4 + (8 + SubChunk1Size) + (8 + SubChunk2Size)
+            mh.Format = (UInt32)0x45564157; // 0x45564157, "WAVE"
 
             // fmt
-            monoFileHeader.Subchunk1ID = (UInt32)0x20746d66; // 0x20746d66, "fmt "
-            monoFileHeader.Subchunk1Size = 16; // 16 for PCM, 40 for WAVEFORMATEXTENSIBLE
-            monoFileHeader.AudioFormat = (UInt16)1; // PCM = 1, WAVEFORMATEXTENSIBLE.SubFormat = 0xFFFE
-            monoFileHeader.NumChannels = (UInt16)1; // Mono = 1, Stereo = 2, etc.
-            monoFileHeader.SampleRate = h.SampleRate; // 8000, 44100, etc.
-            monoFileHeader.ByteRate = (UInt32)((h.SampleRate * 1 * h.BitsPerSample) / 8); // SampleRate * NumChannels * BitsPerSample/8
-            monoFileHeader.BlockAlign = (UInt16)((1 * h.BitsPerSample) / 8); // NumChannels * BitsPerSample/8
-            monoFileHeader.BitsPerSample = h.BitsPerSample; // 8 bits = 8, 16 bits = 16, etc.
+            mh.Subchunk1ID = (UInt32)0x20746d66; // 0x20746d66, "fmt "
+            mh.Subchunk1Size = 16; // 16 for PCM, 40 for WAVEFORMATEXTENSIBLE
+            mh.AudioFormat = (UInt16)1; // PCM = 1, WAVEFORMATEXTENSIBLE.SubFormat = 0xFFFE
+            mh.NumChannels = (UInt16)1; // Mono = 1, Stereo = 2, etc.
+            mh.SampleRate = h.SampleRate; // 8000, 44100, etc.
+            mh.ByteRate = (UInt32)((h.SampleRate * 1 * h.BitsPerSample) / 8); // SampleRate * NumChannels * BitsPerSample/8
+            mh.BlockAlign = (UInt16)((1 * h.BitsPerSample) / 8); // NumChannels * BitsPerSample/8
+            mh.BitsPerSample = h.BitsPerSample; // 8 bits = 8, 16 bits = 16, etc.
 
             // extensible
-            monoFileHeader.ExtraParamSize = (UInt16)0;
-            monoFileHeader.ChannelMask = (UInt32)0;
-            monoFileHeader.GuidSubFormat = new Guid();
+            mh.ExtraParamSize = (UInt16)0;
+            mh.ChannelMask = (UInt32)0;
+            mh.GuidSubFormat = new Guid();
 
             // data
-            monoFileHeader.Subchunk2ID = (UInt32)0x61746164; // 0x61746164, "data"
-            monoFileHeader.Subchunk2Size = (h.Subchunk2Size / h.NumChannels); // NumSamples * NumChannels * BitsPerSample/8
+            mh.Subchunk2ID = (UInt32)0x61746164; // 0x61746164, "data"
+            mh.Subchunk2Size = (h.Subchunk2Size / h.NumChannels); // NumSamples * NumChannels * BitsPerSample/8
 
             // info
-            monoFileHeader.IsExtensible = false;
-            monoFileHeader.HeaderSize = 44;
-            monoFileHeader.TotalSamples = (long)((double)monoFileHeader.Subchunk2Size / ((double)monoFileHeader.NumChannels * (double)monoFileHeader.BitsPerSample / 8));
-            monoFileHeader.Duration = (1 / (double)monoFileHeader.SampleRate) * (double)monoFileHeader.TotalSamples;
+            mh.IsExtensible = false;
+            mh.HeaderSize = 44;
+            mh.TotalSamples = (long)((double)mh.Subchunk2Size / ((double)mh.NumChannels * (double)mh.BitsPerSample / 8));
+            mh.Duration = (1 / (double)mh.SampleRate) * (double)mh.TotalSamples;
 
-            return monoFileHeader;
+            return mh;
         }
-
-
     }
 
     #endregion
