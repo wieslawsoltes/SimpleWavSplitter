@@ -8,9 +8,10 @@ namespace SimpleWavSplitter
     #region References
 
     using System;
+    using System.ComponentModel;
     using System.Linq;
     using System.Windows;
-    using System.ComponentModel;
+    using WavFile;
 
     #endregion
 
@@ -26,7 +27,7 @@ namespace SimpleWavSplitter
         public SimpleWavSplitterWindow()
         {
             InitializeComponent();
-            this.Title = "SimpleWavSplitter v0.0.2";
+            this.Title = "SimpleWavSplitter v0.0.3";
         }
 
         #endregion
@@ -94,7 +95,7 @@ namespace SimpleWavSplitter
                         using (System.IO.FileStream f = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
                         {
                             // read WAV file header
-                            WavFileHeader h = WavFile.ReadFileHeader(f);
+                            WavFileHeader h = WavFileInfo.ReadFileHeader(f);
 
                             // show WAV header
                             MessageBox.Show(
@@ -135,32 +136,37 @@ namespace SimpleWavSplitter
                 {
                     string[] fileNames = (string[])args.Argument;
                     long countBytesTotal = 0;
-                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                    var sw = new System.Diagnostics.Stopwatch();
 
                     sw.Start();
 
                     foreach (string fileName in fileNames)
                     {
-                        Dispatcher.Invoke((Action)delegate()
-                        {
-                            progress.Value = 0;
-                        });
-
                         // parse WAV file header
                         try
                         {
-                            System.IO.FileStream f = null;
+                            // update progress
+                            Dispatcher.Invoke((Action)delegate()
+                            {
+                                progress.Value = 0.0;
+                            });
+
+                            // bytes counter
                             long countBytes = 0;
 
                             // create WAV file stream
-                            f = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                            var f = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
 
                             // read WAV file header
-                            WavFileHeader h = WavFile.ReadFileHeader(f);
+                            WavFileHeader h = WavFileInfo.ReadFileHeader(f);
+
                             countBytes += h.HeaderSize;
                             countBytesTotal += h.HeaderSize;
 
-                            //MessageBox.Show(h.ToString());
+                            // print debug
+                            System.Diagnostics.Debug.Print(string.Format("FileName: {0}, Header:\n{1}", 
+                                fileName, 
+                                h.ToString()));
 
                             // create output filenames
                             string filePath = dlgFileName.Remove(fileName.Length - System.IO.Path.GetFileName(fileName).Length);
@@ -206,7 +212,7 @@ namespace SimpleWavSplitter
                             System.IO.FileStream[] outputFile = new System.IO.FileStream[h.NumChannels];
 
                             // each mono output file has the same header
-                            WavFileHeader monoFileHeader = WavFile.GetMonoWavFileHeader(h);
+                            WavFileHeader monoFileHeader = WavFileInfo.GetMonoWavFileHeader(h);
 
                             // write output files header and create temp buffer for each channel
                             for (int c = 0; c < h.NumChannels; c++)
@@ -214,8 +220,23 @@ namespace SimpleWavSplitter
                                 channelBuffer[c] = new byte[channelBufferSize];
                                 outputFile[c] = new System.IO.FileStream(outputFileNames[c], System.IO.FileMode.Create, System.IO.FileAccess.ReadWrite);
 
-                                WavFile.WriteFileHeader(outputFile[c], monoFileHeader);
+                                WavFileInfo.WriteFileHeader(outputFile[c], monoFileHeader);
                             }
+
+                            // cleanup action
+                            var cleanUp = new Action(() =>
+                            {
+                                // close input file
+                                f.Close();
+                                f.Dispose();
+
+                                // close output files
+                                for (int c = 0; c < h.NumChannels; c++)
+                                {
+                                    outputFile[c].Close();
+                                    outputFile[c].Dispose();
+                                }
+                            });
 
                             // read data from input file and write to multiple-output files
                             for (long i = 0; i < dataSize; i += bufferSize)
@@ -246,26 +267,18 @@ namespace SimpleWavSplitter
                                     // cancel background job
                                     if (worker.CancellationPending)
                                     {
-                                        // close input file
-                                        f.Close();
-                                        f.Dispose();
-
-                                        // close output files
-                                        for (int c = 0; c < h.NumChannels; c++)
-                                        {
-                                            outputFile[c].Close();
-                                            outputFile[c].Dispose();
-                                        }
+                                        cleanUp();
 
                                         // cancel job
                                         args.Cancel = true;
                                         return;
                                     }
 
-                                    // update progress bar
+                                    // update stats
                                     countBytes += n;
                                     countBytesTotal += n;
 
+                                    // update progress
                                     Dispatcher.Invoke((Action)delegate()
                                     {
                                         progress.Value = ((double)countBytes / (double)f.Length) * 100;
@@ -273,16 +286,7 @@ namespace SimpleWavSplitter
                                 }
                             }
 
-                            // close input file
-                            f.Close();
-                            f.Dispose();
-
-                            // close output files
-                            for (int c = 0; c < h.NumChannels; c++)
-                            {
-                                outputFile[c].Close();
-                                outputFile[c].Dispose();
-                            }
+                            cleanUp();
                         }
                         catch (Exception ex)
                         {

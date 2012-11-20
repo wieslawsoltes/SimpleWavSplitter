@@ -13,9 +13,6 @@ namespace SimpleWavSplitter
 
     #region SimpleWavSplitterApp
 
-    /// <summary>
-    /// Interaction logic for SimpleWavSplitterApp.xaml
-    /// </summary>
     public partial class SimpleWavSplitterApp : Application
     {
     }
