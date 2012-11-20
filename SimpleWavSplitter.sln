@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter", "SimpleWavSplitter\SimpleWavSplitter.csproj", "{746BB582-59A3-409A-A9C9-53CCFC287D3F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{76465033-784D-46A6-929B-B4B35E7D422E} = {76465033-784D-46A6-929B-B4B35E7D422E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WavFile", "WavFile\WavFile.csproj", "{76465033-784D-46A6-929B-B4B35E7D422E}"
 EndProject
