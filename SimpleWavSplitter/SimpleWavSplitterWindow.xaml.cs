@@ -227,6 +227,4 @@ namespace SimpleWavSplitter
     }
 
     #endregion
-
-
 }
