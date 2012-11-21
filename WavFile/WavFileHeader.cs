@@ -111,31 +111,31 @@ namespace WavFile
             return String.Format(
                 "[WAVE]\n" +
                 "ChunkID:\t\t{0}\n" +
-                "ChunkSize:\t{1}\n" +
+                "ChunkSize:\t\t{1}\n" +
                 "Format:\t\t{2}\n" +
                 "[fmt]\n" +
-                "Subchunk1ID:\t{3}\n" +
+                "Subchunk1ID:\t\t{3}\n" +
                 "Subchunk1Size:\t{4}\n" +
-                "AudioFormat:\t{5}\n" +
-                "NumChannels:\t{6}\n" +
-                "SampleRate:\t{7}\n" +
+                "AudioFormat:\t\t{5}\n" +
+                "NumChannels:\t\t{6}\n" +
+                "SampleRate:\t\t{7}\n" +
                 "ByteRate:\t\t{8}\n" +
-                "BlockAlign:\t{9}\n" +
+                "BlockAlign:\t\t{9}\n" +
                 "BitsPerSample:\t{10}\n" +
                 "[extra]\n" +
                 "ExtraParamSize:\t{11}\n" +
                 "[extensible]\n" +
                 "Samples:\t\t{12}\n" +
-                "ChannelMask:\t{13}\n" +
+                "ChannelMask:\t\t{13}\n" +
                 "GuidSubFormat:\t{14}\n" +
                 "[data]\n" +
-                "Subchunk2ID:\t{15}\n" +
+                "Subchunk2ID:\t\t{15}\n" +
                 "Subchunk2Size:\t{16}\n" +
                 "[info]\n" +
-                "IsExtensible:\t{17}\n" +
-                "HeaderSize:\t{18}\n" +
+                "IsExtensible:\t\t{17}\n" +
+                "HeaderSize:\t\t{18}\n" +
                 "Duration:\t\t{19}\n" +
-                "TotalSamples:\t{20}",
+                "TotalSamples:\t\t{20}",
                 Encoding.ASCII.GetString(BitConverter.GetBytes(ChunkID)),
                 ChunkSize,
                 Encoding.ASCII.GetString(BitConverter.GetBytes(Format)),

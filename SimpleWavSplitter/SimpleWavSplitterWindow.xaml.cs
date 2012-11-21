@@ -48,12 +48,32 @@ namespace SimpleWavSplitter
         public SimpleWavSplitterWindow()
         {
             InitializeComponent();
-            this.Title = "SimpleWavSplitter v0.1.0.0";
+            this.Title = "SimpleWavSplitter v0.2.0.0";
         }
 
         #endregion
 
         #region Button Events
+
+        /// <summary>
+        /// Browse for custom output path
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnBrowseOutputPath_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog dlg = new System.Windows.Forms.FolderBrowserDialog();
+
+            string text = this.textOutputPath.Text;
+
+            if (text.Length > 0)
+                dlg.SelectedPath = this.textOutputPath.Text;
+
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                this.textOutputPath.Text = dlg.SelectedPath;
+            }
+        }
 
         /// <summary>
         /// Get WAV file header.
@@ -89,7 +109,10 @@ namespace SimpleWavSplitter
 
         #region Methods
 
-        private static void GetWavHeader()
+        /// <summary>
+        /// Get WAV file headers
+        /// </summary>
+        private void GetWavHeader()
         {
             var dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Filter = "WAV Files (*.wav)|*.wav|All Files (*.*)|*.*";
@@ -99,6 +122,9 @@ namespace SimpleWavSplitter
             if (dlg.ShowDialog() == true)
             {
                 string[] fileNames = dlg.FileNames;
+
+                var sb = new System.Text.StringBuilder();
+                int totalFiles = 0;
 
                 foreach (string fileName in fileNames)
                 {
@@ -110,24 +136,28 @@ namespace SimpleWavSplitter
                             // read WAV file header
                             var h = WavFileInfo.ReadFileHeader(f);
 
-                            // show WAV header information
-                            var result = MessageBox.Show(
-                                "FileName:\t\t" + System.IO.Path.GetFileName(fileName) + "\n" +
-                                "FileSize:\t\t" + f.Length.ToString() + "\n\n" +
-                                h.ToString(),
-                                "WAV Info",
-                                MessageBoxButton.OKCancel,
-                                MessageBoxImage.None);
+                            string text = string.Format("FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}", 
+                                System.IO.Path.GetFileName(fileName),
+                                f.Length.ToString(),
+                                h.ToString());
 
-                            if (result == MessageBoxResult.Cancel)
-                                return;
+                            if (totalFiles > 0)
+                                sb.Append("\n\n");
+
+                            sb.Append(text);
+                            totalFiles++;
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        string text = string.Format("Error: {0}\n", ex.Message);
+                        sb.Append(text);
+
+                        textOutput.Text = sb.ToString();
                     }
                 }
+
+                textOutput.Text = sb.ToString();
             }
         }
 
@@ -161,6 +191,16 @@ namespace SimpleWavSplitter
             CancellationToken ct = tokenSource.Token;
 
             var sw = System.Diagnostics.Stopwatch.StartNew();
+            var sb = new System.Text.StringBuilder();
+
+            // debug: total files to split
+            sb.Append(string.Format("Files to split: {0}\n", fileNames.Count()));
+            textOutput.Text = sb.ToString();
+
+            string userOutputPath = this.textOutputPath.Text;
+
+            if (userOutputPath.EndsWith("\\") == false && userOutputPath.Length > 0)
+                userOutputPath += "\\";
 
             // start background task
             task = Task<long>.Factory.StartNew(() =>
@@ -168,24 +208,40 @@ namespace SimpleWavSplitter
                 ct.ThrowIfCancellationRequested();
 
                 long countBytesTotal = 0;
-
                 var splitter = new WavFileSplitter(new SplitProgress(this.progress, this.Dispatcher));
 
                 foreach (string fileName in fileNames)
                 {
                     try
                     {
-                        // get file output file
-                        string outputPath = fileName.Remove(fileName.Length - System.IO.Path.GetFileName(fileName).Length);
+                        // set or get file output file path
+                        string outputPath = 
+                            userOutputPath.Length > 0 ? userOutputPath : 
+                            fileName.Remove(fileName.Length - System.IO.Path.GetFileName(fileName).Length);
+
+                        // debug: split file
+                        Dispatcher.Invoke(new Action(() =>
+                        {
+                            string text = string.Format("Split file: {0}\n",
+                                System.IO.Path.GetFileName(fileName));
+
+                            sb.Append(text);
+
+                            textOutput.Text = sb.ToString();
+                        }));
 
                         // split multi-channel WAV file into single channel WAV files
                         countBytesTotal += splitter.SplitWavFile(fileName, outputPath, ct);
                     }
                     catch (Exception ex)
                     {
+                        // debug: error
                         Dispatcher.Invoke(new Action(() =>
                         {
-                            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            string text = string.Format("Error: {0}\n", ex.Message);
+                            sb.Append(text);
+
+                            textOutput.Text = sb.ToString();
                         }));
 
                         return countBytesTotal;
@@ -200,13 +256,15 @@ namespace SimpleWavSplitter
 
                 if (tokenSource.IsCancellationRequested == false)
                 {
-                    string stats = string.Format("Total data bytes processed: {0} ({1} MB)\nTotal elapsed time: {2}",
+                    // debug
+                    string text = string.Format("Done.\nData bytes processed: {0} ({1} MB)\nElapsed time: {2}\n",
                         totalBytesProcessed.Result,
                         Math.Round((double)totalBytesProcessed.Result / (1024 * 1024), 1),
                         sw.Elapsed);
 
-                    // show split stats
-                    MessageBox.Show(stats, "Done", MessageBoxButton.OK, MessageBoxImage.Information);
+                    sb.Append(text);
+
+                    textOutput.Text = sb.ToString();
                 }
                 else
                 {
@@ -215,10 +273,15 @@ namespace SimpleWavSplitter
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
+        /// <summary>
+        /// Cancel WAV file split jobs
+        /// </summary>
         private void CancelSplitWorker()
         {
             if (task != null && tokenSource != null)
+            {
                 tokenSource.Cancel();
+            }
 
             progress.Value = 0;
         }
