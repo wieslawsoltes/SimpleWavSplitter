@@ -13,6 +13,9 @@ namespace WavFile
 
     #region WavChannelMask
 
+    /// <summary>
+    /// Multi-channel WAV file mask
+    /// </summary>
     public enum WavChannelMask
     {
         SPEAKER_FRONT_LEFT = 0x1,

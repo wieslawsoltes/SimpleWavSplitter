@@ -8,6 +8,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter", "Simple
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WavFile", "WavFile\WavFile.csproj", "{76465033-784D-46A6-929B-B4B35E7D422E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Console", "SimpleWavSplitter.Console\SimpleWavSplitter.Console.csproj", "{0DB24D15-3920-44C4-83FA-89D0F7565E42}"
+	ProjectSection(ProjectDependencies) = postProject
+		{76465033-784D-46A6-929B-B4B35E7D422E} = {76465033-784D-46A6-929B-B4B35E7D422E}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +43,16 @@ Global
 		{76465033-784D-46A6-929B-B4B35E7D422E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{76465033-784D-46A6-929B-B4B35E7D422E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{76465033-784D-46A6-929B-B4B35E7D422E}.Release|x86.ActiveCfg = Release|Any CPU
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

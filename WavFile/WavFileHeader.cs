@@ -18,8 +18,7 @@ namespace WavFile
 
     /// <summary>
     /// The canonical WAVE format starts with the RIFF header
-    /// Based on description from:
-    /// https://ccrma.stanford.edu/courses/422/projects/WaveFormat/
+    /// Based on description from: https://ccrma.stanford.edu/courses/422/projects/WaveFormat/
     /// </summary>
     public struct WavFileHeader
     {

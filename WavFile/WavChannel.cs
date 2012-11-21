@@ -13,6 +13,9 @@ namespace WavFile
 
     #region WavChannel
 
+    /// <summary>
+    /// WAV channel information
+    /// </summary>
     public struct WavChannel
     {
         private readonly string _longName;

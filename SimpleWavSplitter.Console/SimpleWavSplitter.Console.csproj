@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{76465033-784D-46A6-929B-B4B35E7D422E}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{0DB24D15-3920-44C4-83FA-89D0F7565E42}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WavFile</RootNamespace>
-    <AssemblyName>WavFile</AssemblyName>
+    <RootNamespace>SimpleWavSplitter.Console</RootNamespace>
+    <AssemblyName>SimpleWavSplitter.Console</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,16 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IProgress.cs" />
-    <Compile Include="WavChannel.cs" />
-    <Compile Include="WavChannelMask.cs" />
-    <Compile Include="WavFileInfo.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WavFileHeader.cs" />
-    <Compile Include="WavFileSplitter.cs" />
+    <Compile Include="SplitProgress.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reference.txt" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WavFile\WavFile.csproj">
+      <Project>{76465033-784d-46a6-929b-b4b35e7d422e}</Project>
+      <Name>WavFile</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,15 +10,36 @@ namespace SimpleWavSplitter
     using System;
     using System.ComponentModel;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Threading;
     using WavFile;
 
     #endregion
 
     #region SimpleWavSplitterWindow
 
+    /// <summary>
+    /// Main window
+    /// </summary>
     public partial class SimpleWavSplitterWindow : Window
     {
+        #region Properties
+
+        /// <summary>
+        /// Background worker task.
+        /// </summary>
+        private Task task;
+
+        /// <summary>
+        /// Background worker cancellation token source.
+        /// </summary>
+        private CancellationTokenSource tokenSource;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -27,17 +48,8 @@ namespace SimpleWavSplitter
         public SimpleWavSplitterWindow()
         {
             InitializeComponent();
-            this.Title = "SimpleWavSplitter v0.0.3";
+            this.Title = "SimpleWavSplitter v0.1.0.0";
         }
-
-        #endregion
-
-        #region Worker
-
-        /// <summary>
-        /// Using the BackgroundWorker to run jobs in background
-        /// </summary>
-        private BackgroundWorker worker;
 
         #endregion
 
@@ -90,7 +102,6 @@ namespace SimpleWavSplitter
 
                 foreach (string fileName in fileNames)
                 {
-                    // parse WAV file header
                     try
                     {
                         // create WAV file stream
@@ -99,14 +110,17 @@ namespace SimpleWavSplitter
                             // read WAV file header
                             var h = WavFileInfo.ReadFileHeader(f);
 
-                            // show WAV header
-                            MessageBox.Show(
+                            // show WAV header information
+                            var result = MessageBox.Show(
                                 "FileName:\t\t" + System.IO.Path.GetFileName(fileName) + "\n" +
                                 "FileSize:\t\t" + f.Length.ToString() + "\n\n" +
                                 h.ToString(),
                                 "WAV Info",
-                                MessageBoxButton.OK,
+                                MessageBoxButton.OKCancel,
                                 MessageBoxImage.None);
+
+                            if (result == MessageBoxResult.Cancel)
+                                return;
                         }
                     }
                     catch (Exception ex)
@@ -117,6 +131,9 @@ namespace SimpleWavSplitter
             }
         }
 
+        /// <summary>
+        /// Show Open file dialog and split nulti-channel WAV files
+        /// </summary>
         private void SplitWavFiles()
         {
             var dlg = new Microsoft.Win32.OpenFileDialog();
@@ -130,210 +147,78 @@ namespace SimpleWavSplitter
             }
         }
 
-        private void SplitWavFiles(string[] dlgFileNames)
+        /// <summary>
+        /// Split nulti-channel WAV files
+        /// </summary>
+        /// <param name="fileNames">Input file names</param>
+        private void SplitWavFiles(string[] fileNames)
         {
-            // reset window controls to defaults
+            // reset progress
             progress.Value = 0;
 
-            // create background worker
-            worker = new BackgroundWorker();
-            worker.WorkerSupportsCancellation = true;
+            // get cancelletion token
+            tokenSource = new CancellationTokenSource();
+            CancellationToken ct = tokenSource.Token;
 
-            worker.DoWork += (s, args) =>
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+
+            // start background task
+            task = Task<long>.Factory.StartNew(() =>
             {
-                string[] fileNames = (string[])args.Argument;
-                long countBytesTotal = 0;
-                var sw = new System.Diagnostics.Stopwatch();
+                ct.ThrowIfCancellationRequested();
 
-                sw.Start();
+                long countBytesTotal = 0;
+
+                var splitter = new WavFileSplitter(new SplitProgress(this.progress, this.Dispatcher));
 
                 foreach (string fileName in fileNames)
                 {
-                    // parse WAV file header
                     try
                     {
-                        // update progress
-                        Dispatcher.Invoke((Action)delegate()
-                        {
-                            progress.Value = 0.0;
-                        });
+                        // get file output file
+                        string outputPath = fileName.Remove(fileName.Length - System.IO.Path.GetFileName(fileName).Length);
 
-                        // bytes counter
-                        long countBytes = 0;
-
-                        // create WAV file stream
-                        var f = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-
-                        // read WAV file header
-                        WavFileHeader h = WavFileInfo.ReadFileHeader(f);
-
-                        countBytes += h.HeaderSize;
-                        countBytesTotal += h.HeaderSize;
-
-                        // print debug
-                        System.Diagnostics.Debug.Print(string.Format("FileName: {0}, Header:\n{1}",
-                            fileName,
-                            h.ToString()));
-
-                        // create output filenames
-                        string filePath = fileName.Remove(fileName.Length - System.IO.Path.GetFileName(fileName).Length);
-                        string fileNameOnly = System.IO.Path.GetFileNameWithoutExtension(fileName);
-                        string[] outputFileNames = new string[h.NumChannels];
-                        WavChannel[] channels = new WavChannel[h.NumChannels];
-                        int countChannels = 0;
-
-                        // set channel names
-                        if (h.IsExtensible == false)
-                        {
-                            for (int c = 0; c < h.NumChannels; c++)
-                            {
-                                string chNum = (c + 1).ToString("D2");
-                                var ch = new WavChannel("Channel" + chNum, "CH" + chNum, 0);
-                                channels[c] = ch;
-                            }
-                        }
-                        else
-                        {
-                            foreach (WavChannel ch in WavFileHeader.WavMultiChannelTypes)
-                            {
-                                if (((uint)ch.Mask & h.ChannelMask) != 0)
-                                    channels[countChannels++] = ch;
-                            }
-                        }
-
-                        // join: input path + input file name without extension + ''. + short channel name + '.wav' extension
-                        for (int p = 0; p < channels.Count(); p++)
-                        {
-                            outputFileNames[p] = filePath + fileNameOnly + "." + channels[p].ShortName + ".wav";
-                        }
-
-                        // create data buffers
-                        long dataSize = h.Subchunk2Size;
-                        int bufferSize = (int)h.ByteRate;
-                        int channelBufferSize = (int)(h.ByteRate / h.NumChannels);
-                        byte[] buffer = new byte[bufferSize];
-                        byte[][] channelBuffer = new byte[h.NumChannels][];
-                        int copySize = h.BlockAlign / h.NumChannels;
-
-                        // create output files
-                        System.IO.FileStream[] outputFile = new System.IO.FileStream[h.NumChannels];
-
-                        // each mono output file has the same header
-                        WavFileHeader mh = WavFileInfo.GetMonoWavFileHeader(h);
-
-                        // write output files header and create temp buffer for each channel
-                        for (int c = 0; c < h.NumChannels; c++)
-                        {
-                            channelBuffer[c] = new byte[channelBufferSize];
-                            outputFile[c] = new System.IO.FileStream(outputFileNames[c], System.IO.FileMode.Create, System.IO.FileAccess.ReadWrite);
-
-                            WavFileInfo.WriteFileHeader(outputFile[c], mh);
-                        }
-
-                        // cleanup action
-                        var cleanUp = new Action(() =>
-                        {
-                            // close input file
-                            f.Close();
-                            f.Dispose();
-
-                            // close output files
-                            for (int c = 0; c < h.NumChannels; c++)
-                            {
-                                outputFile[c].Close();
-                                outputFile[c].Dispose();
-                            }
-                        });
-
-                        // read data from input file and write to multiple-output files
-                        for (long i = 0; i < dataSize; i += bufferSize)
-                        {
-                            int n = f.Read(buffer, 0, bufferSize);
-                            if (n > 0)
-                            {
-                                // split channel data
-                                int[] count = new int[h.NumChannels];
-
-                                for (int j = 0; j < n; j += h.BlockAlign)
-                                {
-                                    for (int c = 0; c < h.NumChannels; c++)
-                                    {
-                                        for (int k = 0; k < copySize; k++)
-                                        {
-                                            channelBuffer[c][count[c]++] = buffer[j + (c * copySize) + k];
-                                        }
-                                    }
-                                }
-
-                                // write single channel data to a file
-                                for (int c = 0; c < h.NumChannels; c++)
-                                {
-                                    outputFile[c].Write(channelBuffer[c], 0, count[c]);
-                                }
-
-                                // cancel background job
-                                if (worker.CancellationPending)
-                                {
-                                    cleanUp();
-
-                                    // cancel job
-                                    args.Cancel = true;
-                                    return;
-                                }
-
-                                // update stats
-                                countBytes += n;
-                                countBytesTotal += n;
-
-                                // update progress
-                                Dispatcher.Invoke((Action)delegate()
-                                {
-                                    progress.Value = ((double)countBytes / (double)f.Length) * 100;
-                                });
-                            }
-                        }
-
-                        cleanUp();
+                        // split multi-channel WAV file into single channel WAV files
+                        countBytesTotal += splitter.SplitWavFile(fileName, outputPath, ct);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Dispatcher.Invoke(new Action(() =>
+                        {
+                            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }));
+
+                        return countBytesTotal;
                     }
                 }
 
+                return countBytesTotal;
+            })
+            .ContinueWith((totalBytesProcessed) => 
+            {
                 sw.Stop();
 
-                args.Result = new Tuple<TimeSpan, long>(sw.Elapsed, countBytesTotal);
-            };
-
-            worker.RunWorkerCompleted += (s, args) =>
-            {
-                if (args.Cancelled == false)
+                if (tokenSource.IsCancellationRequested == false)
                 {
-                    //SplitWorkResult result = (SplitWorkResult)args.Result;
-                    Tuple<TimeSpan, long> result = (Tuple<TimeSpan, long>)args.Result;
-
                     string stats = string.Format("Total data bytes processed: {0} ({1} MB)\nTotal elapsed time: {2}",
-                        result.Item2,
-                        Math.Round((double)result.Item2 / (1024 * 1024), 1),
-                        result.Item1);
+                        totalBytesProcessed.Result,
+                        Math.Round((double)totalBytesProcessed.Result / (1024 * 1024), 1),
+                        sw.Elapsed);
 
-                    // show statistics to user
+                    // show split stats
                     MessageBox.Show(stats, "Done", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
                     progress.Value = 0;
                 }
-            };
-
-            worker.RunWorkerAsync(dlgFileNames);
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private void CancelSplitWorker()
         {
-            if (worker != null)
-                worker.CancelAsync();
+            if (task != null && tokenSource != null)
+                tokenSource.Cancel();
 
             progress.Value = 0;
         }
@@ -342,4 +227,6 @@ namespace SimpleWavSplitter
     }
 
     #endregion
+
+
 }

@@ -13,6 +13,9 @@ namespace SimpleWavSplitter
 
     #region SimpleWavSplitterApp
 
+    /// <summary>
+    /// Main application
+    /// </summary>
     public partial class SimpleWavSplitterApp : Application
     {
     }

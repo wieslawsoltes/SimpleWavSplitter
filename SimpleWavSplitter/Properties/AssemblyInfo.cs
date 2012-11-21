@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Wiesław Šoltés")]
 [assembly: AssemblyProduct("SimpleWavSplitter")]
-[assembly: AssemblyCopyright("Copyright © Wiesław Šoltés 2010. All Rights Reserved")]
+[assembly: AssemblyCopyright("Copyright © Wiesław Šoltés 2010-2012. All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,6 +51,6 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.0.1.0")]
-[assembly: AssemblyFileVersion("0.0.1.0")]
+[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyFileVersion("0.1.0.0")]
 [assembly: GuidAttribute("FBE97138-5D1E-4498-B32B-3449570C9634")]

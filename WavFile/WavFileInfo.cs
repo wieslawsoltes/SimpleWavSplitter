@@ -14,8 +14,13 @@ namespace WavFile
 
     #region WavFileInfo
 
+    /// <summary>
+    /// Read/Write WAV file header information
+    /// </summary>
     public static class WavFileInfo
     {
+        #region Methods
+
         /// <summary>
         /// Read WAV file header
         /// </summary>
@@ -232,6 +237,8 @@ namespace WavFile
 
             return mh;
         }
+
+        #endregion
     }
 
     #endregion

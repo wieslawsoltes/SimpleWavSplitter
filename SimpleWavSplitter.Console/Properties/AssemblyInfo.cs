@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WavFile")]
-[assembly: AssemblyDescription("WavFile by Wiesław Šoltés")]
+[assembly: AssemblyTitle("SimpleWavSplitter.Console")]
+[assembly: AssemblyDescription("SimpleWavSplitter.Console by Wiesław Šoltés")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Wiesław Šoltés")]
-[assembly: AssemblyProduct("WavFile")]
+[assembly: AssemblyProduct("SimpleWavSplitter.Console")]
 [assembly: AssemblyCopyright("Copyright © Wiesław Šoltés 2010-2012. All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6b828b56-d237-4cb6-92c7-2398197521e9")]
+[assembly: Guid("303d23dd-c234-4e0c-8cbc-4ab06c51702b")]
 
 // Version information for an assembly consists of the following four values:
 //
