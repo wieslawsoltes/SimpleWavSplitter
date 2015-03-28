@@ -1,6 +1,9 @@
 ﻿
 WAV File Reference
 
+Copyright (c) Wiesław Šoltés. All rights reserved.
+Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 0. https://ccrma.stanford.edu/courses/422/projects/WaveFormat/
    The canonical WAVE format starts with the RIFF header
 
