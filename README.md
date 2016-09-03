@@ -12,73 +12,63 @@ Split multi-channel WAV files into single channel WAV files.
 
 ```C#
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using System.Threading;
 using WavFile;
+using static System.Console;
+using static System.Math;
 
-class Program
+namespace SimpleWavSplitter.Console
 {
-    static void Main(string[] args)
+    class Program
     {
-        string fileName = string.Empty;
-        string outputPath = string.Empty;
-
-        if (args.Count() == 1)
+        static void Main(string[] args)
         {
-            fileName = args[0];
-            outputPath = fileName.Remove(fileName.Length - System.IO.Path.GetFileName(fileName).Length);
-        }
-        else if (args.Count() == 2)
-        {
-            fileName = args[0];
-            outputPath = args[1];
-        }
-        else
-        {
-            System.Console.WriteLine("SimpleWavSplitter.Console");
-            System.Console.WriteLine("");
-            System.Console.WriteLine("Usage:");
-            System.Console.WriteLine("SimpleWavSplitter.Console <*.wav> [<OutputPath>]");
-            System.Environment.Exit(-1);
-        }
+            string fileName = string.Empty;
+            string outputPath = string.Empty;
+            if (args.Count() == 1)
+            {
+                fileName = args[0];
+                outputPath = fileName.Remove(fileName.Length - Path.GetFileName(fileName).Length);
+            }
+            else if (args.Count() == 2)
+            {
+                fileName = args[0];
+                outputPath = args[1];
+            }
+            else
+            {
+                var v = Assembly.GetExecutingAssembly().GetName().Version;
+                var title = string.Format("SimpleWavSplitterConsole v{0}.{1}.{2}", v.Major, v.Minor, v.Build);
+                WriteLine(title);
+                Write(Environment.NewLine);
+                WriteLine("Usage:");
+                WriteLine("SimpleWavSplitter.Console <file.wav> [<OutputPath>]");
+                Environment.Exit(-1);
+            }
 
-        long bytesTotal = 0;
-        var splitter = new WavFileSplitter(new SplitProgress());
-        var sw = System.Diagnostics.Stopwatch.StartNew();
-
-        try
-        {
-            bytesTotal = splitter.SplitWavFile(fileName, outputPath, System.Threading.CancellationToken.None);
+            try
+            {
+                long bytesTotal = 0;
+                var splitter = new WavFileSplitter(value => Write(string.Format("\rProgress: {0:0.0}%", value)));
+                var sw = Stopwatch.StartNew();
+                bytesTotal = splitter.SplitWavFile(fileName, outputPath, CancellationToken.None);
+                sw.Stop();
+                Write(Environment.NewLine);
+                WriteLine(string.Format("Data bytes processed: {0} ({1} MB)", bytesTotal, Round((double)bytesTotal / (1024 * 1024), 1)));
+                WriteLine(string.Format("Elapsed time: {0}", sw.Elapsed));
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                WriteLine(ex.Message);
+                WriteLine(ex.StackTrace);
+                Environment.Exit(-1);
+            }
         }
-        catch (Exception ex)
-        {
-            System.Console.WriteLine("Error: {0}", ex.Message);
-            System.Environment.Exit(-1);
-        }
-
-        System.Console.WriteLine("");
-        sw.Stop();
-        string stat1 = string.Format("Data bytes processed: {0} ({1} MB)", bytesTotal, Math.Round((double)bytesTotal / (1024 * 1024), 1));
-        System.Console.WriteLine(stat1);
-        string stat2 = string.Format("Elapsed time: {0}", sw.Elapsed);
-        System.Console.WriteLine(stat2);
-        System.Environment.Exit(0);
-    }
-}
-```
-
-```C#
-using System;
-using WavFile;
-
-public class SplitProgress : IProgress
-{
-    public void Update(double value)
-    {
-        string text = string.Format("\rProgress: {0:0.0}%", value);
-        System.Console.Write(text);
     }
 }
 ```
@@ -86,15 +76,19 @@ public class SplitProgress : IProgress
 ### Get Wav Header
 
 ```C#
+using System.IO;
+using static System.Console;
+
 string fileName = "test.wav";
-using (System.IO.FileStream f = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+
+using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
 {
     var h = WavFileInfo.ReadFileHeader(f);
-    string text = string.Format("FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}", 
-        System.IO.Path.GetFileName(fileName),
-        f.Length.ToString(),
-        h.ToString());
-    System.Console.Write(text);
+    Write(string.Format(
+        "FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}", 
+        Path.GetFileName(fileName), 
+        f.Length.ToString(), 
+        h.ToString()));
 }
 ```
 
