@@ -1,28 +1,29 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.IO;
 using System.Text;
 
 namespace WavFile
 {
     /// <summary>
-    /// Read/Write WAV file header information
+    /// Read/Write WAV file header information.
     /// </summary>
     public static class WavFileInfo
     {
         /// <summary>
-        /// Read WAV file header
+        /// Read WAV file header.
         /// </summary>
-        /// <param name="f"></param>
-        /// <returns></returns>
-        public static WavFileHeader ReadFileHeader(System.IO.FileStream f)
+        /// <param name="fs">The file stream.</param>
+        /// <returns>The new instance of the <see cref="WavFileHeader"/> struct.</returns>
+        public static WavFileHeader ReadFileHeader(FileStream fs)
         {
             var h = new WavFileHeader();
 
             h.HeaderSize = 0;
 
-            // read WAV header
-            var b = new System.IO.BinaryReader(f);
+            // Read WAV header.
+            var b = new BinaryReader(fs);
 
             // WAVE
             h.ChunkID = b.ReadUInt32();         // 0x46464952, "RIFF"
@@ -43,7 +44,7 @@ namespace WavFile
 
             h.HeaderSize += 24;
 
-            // read PCM data or extensible data if exists
+            // Read PCM data or extensible data if exists.
             if (h.Subchunk1Size == 16 && h.AudioFormat == 1) // PCM
             {
                 h.IsExtensible = false;
@@ -80,14 +81,14 @@ namespace WavFile
 
                     h.HeaderSize += 22;
 
-                    // check sub-format
+                    // Check sub-format.
                     h.GuidSubFormat = new Guid(SubFormat);
                     if (h.GuidSubFormat != WavFileHeader.subTypePCM && h.GuidSubFormat != WavFileHeader.subTypeIEEE_FLOAT)
                     {
                         throw new Exception(String.Format("Not supported WAV file type: {0}", h.GuidSubFormat));
                     }
 
-                    // find "data" chunk
+                    // Find "data" chunk.
                     while (b.PeekChar() != -1)
                     {
                         UInt32 chunk = b.ReadUInt32();
@@ -104,7 +105,7 @@ namespace WavFile
                         }
                         else
                         {
-                            // read other non "data" chunks
+                            // Read other non "data" chunks.
                             UInt32 chunkSize = b.ReadUInt32();
 
                             h.HeaderSize += 4;
@@ -126,24 +127,24 @@ namespace WavFile
                 throw new Exception("Not supported WAV file header.");
             }
 
-            // calculate number of total samples
+            // Calculate number of total samples.
             h.TotalSamples = (long)((double)h.Subchunk2Size / ((double)h.NumChannels * (double)h.BitsPerSample / 8));
 
-            // calculate duration in seconds
+            // Calculate duration in seconds.
             h.Duration = (1 / (double)h.SampleRate) * (double)h.TotalSamples;
 
             return h;
         }
 
         /// <summary>
-        /// Write WAV file header
+        /// Write WAV file header.
         /// </summary>
-        /// <param name="f"></param>
-        /// <param name="h"></param>
-        public static void WriteFileHeader(System.IO.FileStream f, WavFileHeader h)
+        /// <param name="fs">The file stream.</param>
+        /// <param name="h">The wav file header.</param>
+        public static void WriteFileHeader(FileStream fs, WavFileHeader h)
         {
-            // write WAV header
-            var b = new System.IO.BinaryWriter(f);
+            // Write WAV header.
+            var b = new BinaryWriter(fs);
 
             // WAVE
             b.Write((UInt32)0x46464952); // 0x46464952, "RIFF"
@@ -160,7 +161,7 @@ namespace WavFile
             b.Write(h.BlockAlign);
             b.Write(h.BitsPerSample);
 
-            // write PCM data or extensible data if exists
+            // Write PCM data or extensible data if exists.
             if (h.Subchunk1Size == 16 && h.AudioFormat == 1) // PCM
             {
                 b.Write((UInt32)0x61746164); // 0x61746164, "data"
@@ -168,7 +169,7 @@ namespace WavFile
             }
             else if (h.Subchunk1Size > 16 && h.AudioFormat == 0xFFFE) // WAVEFORMATEXTENSIBLE
             {
-                // write WAVEFORMATEXTENSIBLE
+                // Write WAVEFORMATEXTENSIBLE
                 b.Write(h.ExtraParamSize);
 
                 b.Write(h.Samples);
@@ -185,13 +186,13 @@ namespace WavFile
         }
 
         /// <summary>
-        /// Get mono WAV file header from multi-channel WAV file
+        /// Get mono WAV file header from multi-channel WAV file.
         /// </summary>
-        /// <param name="h"></param>
-        /// <returns></returns>
+        /// <param name="h">The wav file header.</param>
+        /// <returns>The new instance of the <see cref="WavFileHeader"/> struct.</returns>
         public static WavFileHeader GetMonoWavFileHeader(WavFileHeader h)
         {
-            // each mono output file has the same header
+            // Each mono output file has the same header.
             var mh = new WavFileHeader();
 
             // WAVE

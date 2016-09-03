@@ -8,7 +8,7 @@ using System.Text;
 namespace WavFile
 {
     /// <summary>
-    /// The canonical WAVE format starts with the RIFF header
+    /// The canonical WAVE format starts with the RIFF header.
     /// Based on description from: https://ccrma.stanford.edu/courses/422/projects/WaveFormat/
     /// </summary>
     public struct WavFileHeader
@@ -94,7 +94,6 @@ namespace WavFile
         public static readonly Guid subTypePCM = new Guid("00000001-0000-0010-8000-00aa00389b71");
         public static readonly Guid subTypeIEEE_FLOAT = new Guid("00000003-0000-0010-8000-00aa00389b71");
 
-        // ToString()
         public override string ToString()
         {
             return String.Format(

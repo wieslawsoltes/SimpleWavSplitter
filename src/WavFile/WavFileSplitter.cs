@@ -1,77 +1,55 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
 namespace WavFile
 {
     /// <summary>
-    /// Split multi-channel WAV file into single channel WAV files
+    /// Split multi-channel WAV file into single channel WAV files.
     /// </summary>
     public class WavFileSplitter
     {
-        public Action<double> Progress { get; private set; }
+        private Action<double> Progress { get; }
 
         /// <summary>
-        /// Default constructor
+        /// Initializes new instance of the <see cref="WavFileSplitter"/> class.
         /// </summary>
-        public WavFileSplitter() { }
-
-        /// <summary>
-        /// Set progress handler
-        /// </summary>
-        /// <param name="progress"></param>
+        /// <param name="progress">The progress update action.</param>
         public WavFileSplitter(Action<double> progress)
         {
-            this.Progress = progress;
+            Progress = progress;
         }
 
         /// <summary>
-        /// Split multi-channel WAV file into single channel WAV files
+        /// Split multi-channel WAV file into single channel WAV files.
         /// </summary>
-        /// <param name="fileName">Input WAV file name</param>
-        /// <param name="outputPath">Output WAV files path</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
+        /// <param name="fileName">Input WAV file name.</param>
+        /// <param name="outputPath">Output WAV files path.</param>
+        /// <param name="ct">Cancellation token.</param>
+        /// <returns>The total processed bytes.</returns>
         public long SplitWavFile(string fileName, string outputPath, CancellationToken ct)
         {
             long countBytesTotal = 0;
-
-            // update progress
-            if (Progress != null)
-            {
-                Progress(0.0);
-            }
-
-            // bytes counter
             long countBytes = 0;
+            var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            var header = WavFileInfo.ReadFileHeader(fs);
 
-            // create WAV file stream
-            var f = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            Progress(0.0);
 
-            // read WAV file header
-            WavFileHeader h = WavFileInfo.ReadFileHeader(f);
+            countBytes += header.HeaderSize;
+            countBytesTotal += header.HeaderSize;
 
-            countBytes += h.HeaderSize;
-            countBytesTotal += h.HeaderSize;
-
-            // print header info
-            //System.Diagnostics.Debug.Print(string.Format("FileName: {0}, Header:\n{1}",
-            //    fileName,
-            //    h.ToString()));
-
-            // create output filenames
-            //string outputPath = fileName.Remove(fileName.Length - System.IO.Path.GetFileName(fileName).Length);
-            string fileNameOnly = System.IO.Path.GetFileNameWithoutExtension(fileName);
-            string[] outputFileNames = new string[h.NumChannels];
-            WavChannel[] channels = new WavChannel[h.NumChannels];
+            string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
+            string[] outputFileNames = new string[header.NumChannels];
+            WavChannel[] channels = new WavChannel[header.NumChannels];
             int countChannels = 0;
 
-            // set channel names
-            if (h.IsExtensible == false)
+            if (header.IsExtensible == false)
             {
-                for (int c = 0; c < h.NumChannels; c++)
+                for (int c = 0; c < header.NumChannels; c++)
                 {
                     string chNum = (c + 1).ToString("D2");
                     var ch = new WavChannel("Channel" + chNum, "CH" + chNum, 0);
@@ -82,67 +60,56 @@ namespace WavFile
             {
                 foreach (WavChannel ch in WavFileHeader.WavMultiChannelTypes)
                 {
-                    if (((uint)ch.Mask & h.ChannelMask) != 0)
+                    if (((uint)ch.Mask & header.ChannelMask) != 0)
+                    {
                         channels[countChannels++] = ch;
+                    }
                 }
             }
 
-            // join: input path + input file name without extension + ''. + short channel name + '.wav' extension
             for (int p = 0; p < channels.Count(); p++)
             {
                 outputFileNames[p] = outputPath + fileNameOnly + "." + channels[p].ShortName + ".wav";
             }
 
-            // create data buffers
-            long dataSize = h.Subchunk2Size;
-            int bufferSize = (int)h.ByteRate;
-            int channelBufferSize = (int)(h.ByteRate / h.NumChannels);
+            long dataSize = header.Subchunk2Size;
+            int bufferSize = (int)header.ByteRate;
+            int channelBufferSize = (int)(header.ByteRate / header.NumChannels);
             byte[] buffer = new byte[bufferSize];
-            byte[][] channelBuffer = new byte[h.NumChannels][];
-            int copySize = h.BlockAlign / h.NumChannels;
+            byte[][] channelBuffer = new byte[header.NumChannels][];
+            int copySize = header.BlockAlign / header.NumChannels;
+            var outputFiles = new FileStream[header.NumChannels];
+            var mh = WavFileInfo.GetMonoWavFileHeader(header);
 
-            // create output files
-            System.IO.FileStream[] outputFile = new System.IO.FileStream[h.NumChannels];
-
-            // each mono output file has the same header
-            WavFileHeader mh = WavFileInfo.GetMonoWavFileHeader(h);
-
-            // write output files header and create temp buffer for each channel
-            for (int c = 0; c < h.NumChannels; c++)
+            for (int c = 0; c < header.NumChannels; c++)
             {
                 channelBuffer[c] = new byte[channelBufferSize];
-                outputFile[c] = new System.IO.FileStream(outputFileNames[c], System.IO.FileMode.Create, System.IO.FileAccess.ReadWrite);
-
-                WavFileInfo.WriteFileHeader(outputFile[c], mh);
+                outputFiles[c] = new FileStream(outputFileNames[c], FileMode.Create, FileAccess.ReadWrite);
+                WavFileInfo.WriteFileHeader(outputFiles[c], mh);
             }
 
-            // cleanup action
             var cleanUp = new Action(() =>
             {
-                // close input file
-                f.Close();
-                f.Dispose();
+                fs.Close();
+                fs.Dispose();
 
-                // close output files
-                for (int c = 0; c < h.NumChannels; c++)
+                for (int c = 0; c < header.NumChannels; c++)
                 {
-                    outputFile[c].Close();
-                    outputFile[c].Dispose();
+                    outputFiles[c].Close();
+                    outputFiles[c].Dispose();
                 }
             });
 
-            // read data from input file and write to multiple-output files
             for (long i = 0; i < dataSize; i += bufferSize)
             {
-                int n = f.Read(buffer, 0, bufferSize);
+                int n = fs.Read(buffer, 0, bufferSize);
                 if (n > 0)
                 {
-                    // split channel data
-                    int[] count = new int[h.NumChannels];
+                    int[] count = new int[header.NumChannels];
 
-                    for (int j = 0; j < n; j += h.BlockAlign)
+                    for (int j = 0; j < n; j += header.BlockAlign)
                     {
-                        for (int c = 0; c < h.NumChannels; c++)
+                        for (int c = 0; c < header.NumChannels; c++)
                         {
                             for (int k = 0; k < copySize; k++)
                             {
@@ -151,34 +118,25 @@ namespace WavFile
                         }
                     }
 
-                    // write single channel data to a file
-                    for (int c = 0; c < h.NumChannels; c++)
+                    for (int c = 0; c < header.NumChannels; c++)
                     {
-                        outputFile[c].Write(channelBuffer[c], 0, count[c]);
+                        outputFiles[c].Write(channelBuffer[c], 0, count[c]);
                     }
-
 
                     if (ct.IsCancellationRequested)
                     {
                         cleanUp();
-
                         ct.ThrowIfCancellationRequested();
                     }
 
-                    // update stats
                     countBytes += n;
                     countBytesTotal += n;
 
-                    // update progress
-                    if (Progress != null)
-                    {
-                        Progress(((double)countBytes / (double)f.Length) * 100);
-                    }
+                    Progress((countBytes / fs.Length) * 100.0);
                 }
             }
 
             cleanUp();
-
             return countBytesTotal;
         }
     }

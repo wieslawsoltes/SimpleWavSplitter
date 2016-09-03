@@ -7,7 +7,7 @@ namespace SimpleWavSplitter
     /// <summary>
     /// Main application.
     /// </summary>
-    public partial class SimpleWavSplitterApp : Application
+    public partial class App : Application
     {
     }
 }

@@ -4,7 +4,7 @@
 namespace WavFile
 {
     /// <summary>
-    /// WAV channel information
+    /// WAV channel information.
     /// </summary>
     public struct WavChannel
     {

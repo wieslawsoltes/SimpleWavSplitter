@@ -4,7 +4,7 @@
 namespace WavFile
 {
     /// <summary>
-    /// Multi-channel WAV file mask
+    /// Multi-channel WAV file mask.
     /// </summary>
     public enum WavChannelMask
     {
