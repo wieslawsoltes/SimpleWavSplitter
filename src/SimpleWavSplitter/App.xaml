@@ -3,5 +3,5 @@
 <Application x:Class="SimpleWavSplitter.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="SimpleWavSplitterWindow.xaml">
+             StartupUri="MainWindow.xaml">
 </Application>

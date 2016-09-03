@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,7 +15,7 @@ namespace SimpleWavSplitter
     /// <summary>
     /// Main window
     /// </summary>
-    public partial class SimpleWavSplitterWindow : Window
+    public partial class MainWindow : Window
     {
         /// <summary>
         /// Background worker task.
@@ -26,12 +28,13 @@ namespace SimpleWavSplitter
         private CancellationTokenSource tokenSource;
 
         /// <summary>
-        /// SimpleWavSplitterWindow Constructor
+        /// MainWindow Constructor
         /// </summary>
-        public SimpleWavSplitterWindow()
+        public MainWindow()
         {
             InitializeComponent();
-            this.Title = "SimpleWavSplitter v0.2.0.0";
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            this.Title = string.Format("SimpleWavSplitter v{0}.{1}.{2}", version.Major, version.Minor, version.Build);
         }
 
         /// <summary>
