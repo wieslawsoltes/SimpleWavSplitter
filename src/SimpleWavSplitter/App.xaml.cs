@@ -5,7 +5,7 @@ using System.Windows;
 namespace SimpleWavSplitter
 {
     /// <summary>
-    /// Main application
+    /// Main application.
     /// </summary>
     public partial class SimpleWavSplitterApp : Application
     {

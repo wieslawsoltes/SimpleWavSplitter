@@ -11,7 +11,7 @@ namespace WavFile
     /// </summary>
     public class WavFileSplitter
     {
-        public IProgress Progress { get; private set; }
+        public Action<double> Progress { get; private set; }
 
         /// <summary>
         /// Default constructor
@@ -22,7 +22,7 @@ namespace WavFile
         /// Set progress handler
         /// </summary>
         /// <param name="progress"></param>
-        public WavFileSplitter(IProgress progress)
+        public WavFileSplitter(Action<double> progress)
         {
             this.Progress = progress;
         }
@@ -40,7 +40,9 @@ namespace WavFile
 
             // update progress
             if (Progress != null)
-                Progress.Update(0.0);
+            {
+                Progress(0.0);
+            }
 
             // bytes counter
             long countBytes = 0;
@@ -169,7 +171,9 @@ namespace WavFile
 
                     // update progress
                     if (Progress != null)
-                        Progress.Update(((double)countBytes / (double)f.Length) * 100);
+                    {
+                        Progress(((double)countBytes / (double)f.Length) * 100);
+                    }
                 }
             }
 

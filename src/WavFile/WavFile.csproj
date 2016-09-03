@@ -46,7 +46,6 @@
     <Compile Include="..\Shared\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="IProgress.cs" />
     <Compile Include="WavChannel.cs" />
     <Compile Include="WavChannelMask.cs" />
     <Compile Include="WavFileInfo.cs" />

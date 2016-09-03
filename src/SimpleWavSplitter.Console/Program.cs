@@ -39,7 +39,7 @@ namespace SimpleWavSplitter.Console
             }
 
             long bytesTotal = 0;
-            var splitter = new WavFileSplitter(new SplitProgress());
+            var splitter = new WavFileSplitter(value => System.Console.Write(string.Format("\rProgress: {0:0.0}%", value)));
 
             var sw = System.Diagnostics.Stopwatch.StartNew();
 

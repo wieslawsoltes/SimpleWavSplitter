@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -13,7 +12,7 @@ using WavFile;
 namespace SimpleWavSplitter
 {
     /// <summary>
-    /// Main window
+    /// Main window.
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -186,7 +185,7 @@ namespace SimpleWavSplitter
                 ct.ThrowIfCancellationRequested();
 
                 long countBytesTotal = 0;
-                var splitter = new WavFileSplitter(new SplitProgress(this.progress, this.Dispatcher));
+                var splitter = new WavFileSplitter(value => this.Dispatcher.Invoke(() => this.progress.Value = value));
 
                 foreach (string fileName in fileNames)
                 {
@@ -234,7 +233,6 @@ namespace SimpleWavSplitter
 
                 if (tokenSource.IsCancellationRequested == false)
                 {
-                    // debug
                     string text = string.Format("Done.\nData bytes processed: {0} ({1} MB)\nElapsed time: {2}\n",
                         totalBytesProcessed.Result,
                         Math.Round((double)totalBytesProcessed.Result / (1024 * 1024), 1),
@@ -244,11 +242,10 @@ namespace SimpleWavSplitter
 
                     textOutput.Text = sb.ToString();
                 }
-                else
-                {
-                    progress.Value = 0;
-                }
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+
+                progress.Value = 0;
+            }, 
+            TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         /// <summary>
