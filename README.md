@@ -2,9 +2,6 @@
 
 Split multi-channel WAV files into single channel WAV files.
 
-Copyright © Wiesław Šoltés 2010-2016. All Rights Reserved
-
-* To contact author send e-mail to: wieslaw.soltes@gmail.com
 * To run program please install .NET Framework Version 4.5
 * To build program use Microsoft Visual C# 2015.
 * Download are available at: https://github.com/wieslawsoltes/SimpleWavSplitter
