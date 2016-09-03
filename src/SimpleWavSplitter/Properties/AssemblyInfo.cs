@@ -5,16 +5,10 @@ using System.Runtime.InteropServices;
 using System.Windows;
 
 [assembly: AssemblyTitle("SimpleWavSplitter")]
-[assembly: AssemblyDescription("SimpleWavSplitter by Wiesław Šoltés")]
+[assembly: AssemblyDescription("Split multi-channel WAV files into single channel WAV files.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Wiesław Šoltés")]
 [assembly: AssemblyProduct("SimpleWavSplitter")]
-[assembly: AssemblyCopyright("Copyright © Wiesław Šoltés 2010-2012. All Rights Reserved")]
-[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 [assembly: Guid("FBE97138-5D1E-4498-B32B-3449570C9634")]
-[assembly: AssemblyVersion("0.2.0")]
-[assembly: AssemblyFileVersion("0.2.0")]
-[assembly: AssemblyInformationalVersion("0.2.0")]

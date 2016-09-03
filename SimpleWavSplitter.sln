@@ -3,16 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter", "SimpleWavSplitter\SimpleWavSplitter.csproj", "{746BB582-59A3-409A-A9C9-53CCFC287D3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter", "src\SimpleWavSplitter\SimpleWavSplitter.csproj", "{746BB582-59A3-409A-A9C9-53CCFC287D3F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{76465033-784D-46A6-929B-B4B35E7D422E} = {76465033-784D-46A6-929B-B4B35E7D422E}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WavFile", "WavFile\WavFile.csproj", "{76465033-784D-46A6-929B-B4B35E7D422E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WavFile", "src\WavFile\WavFile.csproj", "{76465033-784D-46A6-929B-B4B35E7D422E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Console", "SimpleWavSplitter.Console\SimpleWavSplitter.Console.csproj", "{0DB24D15-3920-44C4-83FA-89D0F7565E42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Console", "src\SimpleWavSplitter.Console\SimpleWavSplitter.Console.csproj", "{0DB24D15-3920-44C4-83FA-89D0F7565E42}"
 	ProjectSection(ProjectDependencies) = postProject
 		{76465033-784D-46A6-929B-B4B35E7D422E} = {76465033-784D-46A6-929B-B4B35E7D422E}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{D848C9FA-95C3-491C-A343-E5A1A9AD214C}"
+	ProjectSection(SolutionItems) = preProject
+		src\Shared\SharedAssemblyInfo.cs = src\Shared\SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
 Global
@@ -36,5 +43,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{746BB582-59A3-409A-A9C9-53CCFC287D3F} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
+		{76465033-784D-46A6-929B-B4B35E7D422E} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
+		{0DB24D15-3920-44C4-83FA-89D0F7565E42} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 	EndGlobalSection
 EndGlobal
