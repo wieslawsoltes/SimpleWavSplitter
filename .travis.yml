@@ -1,0 +1,16 @@
+language: csharp
+os:
+  - linux
+  - osx
+mono:
+  - latest
+script:
+  - ./build.sh --target "Travis" --platform "Mono" --configuration "Release"
+notifications:
+  email: false
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/d9a05a0b1fcbe768bbcd
+    on_success: change
+    on_failure: always
+    on_start: never
