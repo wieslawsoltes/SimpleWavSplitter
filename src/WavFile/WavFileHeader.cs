@@ -16,46 +16,139 @@ namespace WavFile
         //
         // WAVE                             bytes=12
         //
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt32 ChunkID;          //  bytes=4
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt32 ChunkSize;        //  bytes=4
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt32 Format;           //  bytes=4
         //
         // fmt                              bytes=24
         //
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt32 Subchunk1ID;      //  bytes=4
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt32 Subchunk1Size;    //  bytes=4
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt16 AudioFormat;      //  bytes=2
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt16 NumChannels;      //  bytes=2
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt32 SampleRate;       //  bytes=4
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt32 ByteRate;         //  bytes=4
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt16 BlockAlign;       //  bytes=2
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt16 BitsPerSample;    //  bytes=2
+
         //
         // extra                            bytes=2
         // if h.Subchunk1Size > 16
         //
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt16 ExtraParamSize;   //  bytes=2
+
         //
         // extensible                       bytes=22
         //
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt16 Samples;          //  bytes=2
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt32 ChannelMask;      //  bytes=4
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Guid GuidSubFormat;      //  bytes=16
+
         //
         // data                             bytes=8
         //
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt32 Subchunk2ID;      //  bytes=4
+
+        /// <summary>
+        /// 
+        /// </summary>
         public UInt32 Subchunk2Size;    //  bytes=4
+
         //
         // info
         //
+
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsExtensible;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public int HeaderSize;  // normal WAV = 44 bytes, extensible WAV = 44 + 24 = 68 bytes (without extra chunks)
+
+        /// <summary>
+        /// 
+        /// </summary>
         public double Duration; // duration in seconds
+
+        /// <summary>
+        /// 
+        /// </summary>
         public long TotalSamples;
+        
         //
         // channel types
         //
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly IList<WavChannel> WavChannelTypes = new ReadOnlyCollection<WavChannel>(
             new[]
             {
@@ -67,6 +160,10 @@ namespace WavFile
         //
         // multi-channel types
         //
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly IList<WavChannel> WavMultiChannelTypes = new ReadOnlyCollection<WavChannel>(
             new[]
             {
@@ -91,9 +188,21 @@ namespace WavFile
             });
 
         // WAVEFORMATEXTENSIBLE sub-formats
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly Guid subTypePCM = new Guid("00000001-0000-0010-8000-00aa00389b71");
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly Guid subTypeIEEE_FLOAT = new Guid("00000003-0000-0010-8000-00aa00389b71");
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return String.Format(
