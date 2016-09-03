@@ -1,19 +1,12 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Text;
 
 namespace WavFile
 {
-    #region References
-
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Text;
-
-    #endregion
-
-    #region WavFileHeader
-
     /// <summary>
     /// The canonical WAVE format starts with the RIFF header
     /// Based on description from: https://ccrma.stanford.edu/courses/422/projects/WaveFormat/
@@ -63,9 +56,8 @@ namespace WavFile
         //
         // channel types
         //
-        public static readonly IList<WavChannel> WavChannelTypes = new ReadOnlyCollection<WavChannel>
-            (
-            new[] 
+        public static readonly IList<WavChannel> WavChannelTypes = new ReadOnlyCollection<WavChannel>(
+            new[]
             {
                  new WavChannel ("Mono",                    "M",   0                                                ),
                  new WavChannel ("Left",                    "L",   0                                                ),
@@ -75,9 +67,8 @@ namespace WavFile
         //
         // multi-channel types
         //
-        public static readonly IList<WavChannel> WavMultiChannelTypes = new ReadOnlyCollection<WavChannel>
-            (
-            new[] 
+        public static readonly IList<WavChannel> WavMultiChannelTypes = new ReadOnlyCollection<WavChannel>(
+            new[]
             {
                  new WavChannel ("Front Left",              "FL",   WavChannelMask.SPEAKER_FRONT_LEFT               ),
                  new WavChannel ("Front Right",             "FR",   WavChannelMask.SPEAKER_FRONT_RIGHT              ),
@@ -157,6 +148,4 @@ namespace WavFile
                 TotalSamples);
         }
     }
-
-    #endregion
 }

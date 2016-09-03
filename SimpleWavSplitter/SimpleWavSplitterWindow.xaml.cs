@@ -1,31 +1,20 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
+using WavFile;
 
 namespace SimpleWavSplitter
 {
-    #region References
-
-    using System;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Threading;
-    using WavFile;
-
-    #endregion
-
-    #region SimpleWavSplitterWindow
-
     /// <summary>
     /// Main window
     /// </summary>
     public partial class SimpleWavSplitterWindow : Window
     {
-        #region Properties
-
         /// <summary>
         /// Background worker task.
         /// </summary>
@@ -36,10 +25,6 @@ namespace SimpleWavSplitter
         /// </summary>
         private CancellationTokenSource tokenSource;
 
-        #endregion
-
-        #region Constructor
-
         /// <summary>
         /// SimpleWavSplitterWindow Constructor
         /// </summary>
@@ -48,10 +33,6 @@ namespace SimpleWavSplitter
             InitializeComponent();
             this.Title = "SimpleWavSplitter v0.2.0.0";
         }
-
-        #endregion
-
-        #region Button Events
 
         /// <summary>
         /// Browse for custom output path
@@ -103,10 +84,6 @@ namespace SimpleWavSplitter
             CancelSplitWorker();
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Get WAV file headers
         /// </summary>
@@ -134,7 +111,7 @@ namespace SimpleWavSplitter
                             // read WAV file header
                             var h = WavFileInfo.ReadFileHeader(f);
 
-                            string text = string.Format("FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}", 
+                            string text = string.Format("FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}",
                                 System.IO.Path.GetFileName(fileName),
                                 f.Length.ToString(),
                                 h.ToString());
@@ -160,7 +137,7 @@ namespace SimpleWavSplitter
         }
 
         /// <summary>
-        /// Show Open file dialog and split nulti-channel WAV files
+        /// Show Open file dialog and split multi-channel WAV files
         /// </summary>
         private void SplitWavFiles()
         {
@@ -176,7 +153,7 @@ namespace SimpleWavSplitter
         }
 
         /// <summary>
-        /// Split nulti-channel WAV files
+        /// Split multi-channel WAV files
         /// </summary>
         /// <param name="fileNames">Input file names</param>
         private void SplitWavFiles(string[] fileNames)
@@ -184,7 +161,7 @@ namespace SimpleWavSplitter
             // reset progress
             progress.Value = 0;
 
-            // get cancelletion token
+            // get cancellation token
             tokenSource = new CancellationTokenSource();
             CancellationToken ct = tokenSource.Token;
 
@@ -213,8 +190,8 @@ namespace SimpleWavSplitter
                     try
                     {
                         // set or get file output file path
-                        string outputPath = 
-                            userOutputPath.Length > 0 ? userOutputPath : 
+                        string outputPath =
+                            userOutputPath.Length > 0 ? userOutputPath :
                             fileName.Remove(fileName.Length - System.IO.Path.GetFileName(fileName).Length);
 
                         // debug: split file
@@ -248,7 +225,7 @@ namespace SimpleWavSplitter
 
                 return countBytesTotal;
             })
-            .ContinueWith((totalBytesProcessed) => 
+            .ContinueWith((totalBytesProcessed) =>
             {
                 sw.Stop();
 
@@ -283,9 +260,5 @@ namespace SimpleWavSplitter
 
             progress.Value = 0;
         }
-
-        #endregion
     }
-
-    #endregion
 }

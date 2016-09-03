@@ -1,24 +1,15 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
+using System.Text;
 
 namespace WavFile
 {
-    #region References
-
-    using System;
-    using System.Text;
-
-    #endregion
-
-    #region WavFileInfo
-
     /// <summary>
     /// Read/Write WAV file header information
     /// </summary>
     public static class WavFileInfo
     {
-        #region Methods
-
         /// <summary>
         /// Read WAV file header
         /// </summary>
@@ -138,7 +129,7 @@ namespace WavFile
             // calculate number of total samples
             h.TotalSamples = (long)((double)h.Subchunk2Size / ((double)h.NumChannels * (double)h.BitsPerSample / 8));
 
-            // calculate dureation in seconds
+            // calculate duration in seconds
             h.Duration = (1 / (double)h.SampleRate) * (double)h.TotalSamples;
 
             return h;
@@ -235,9 +226,5 @@ namespace WavFile
 
             return mh;
         }
-
-        #endregion
     }
-
-    #endregion
 }

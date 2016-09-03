@@ -3,14 +3,6 @@
 
 namespace WavFile
 {
-    #region References
-
-    using System;
-
-    #endregion
-
-    #region WavChannel
-
     /// <summary>
     /// WAV channel information
     /// </summary>
@@ -31,6 +23,4 @@ namespace WavFile
         public string ShortName { get { return _shortName; } }
         public WavChannelMask Mask { get { return _mask; } }
     }
-
-    #endregion
 }

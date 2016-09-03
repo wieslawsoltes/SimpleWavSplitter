@@ -1,30 +1,17 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
+using System.Linq;
+using System.Threading;
 
 namespace WavFile
 {
-    #region References
-
-    using System;
-    using System.Linq;
-    using System.Threading;
-
-    #endregion
-
-    #region WavFileSplitter
-
     /// <summary>
     /// Split multi-channel WAV file into single channel WAV files
     /// </summary>
     public class WavFileSplitter
     {
-        #region Properties
-
         public IProgress Progress { get; private set; }
-
-        #endregion
-
-        #region Constructor
 
         /// <summary>
         /// Default constructor
@@ -39,10 +26,6 @@ namespace WavFile
         {
             this.Progress = progress;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Split multi-channel WAV file into single channel WAV files
@@ -194,9 +177,5 @@ namespace WavFile
 
             return countBytesTotal;
         }
-
-        #endregion
     }
-
-    #endregion
 }

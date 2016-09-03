@@ -3,14 +3,6 @@
 
 namespace WavFile
 {
-    #region References
-
-    using System;
-
-    #endregion
-
-    #region WavChannelMask
-
     /// <summary>
     /// Multi-channel WAV file mask
     /// </summary>
@@ -35,6 +27,4 @@ namespace WavFile
         SPEAKER_TOP_BACK_CENTER = 0x10000,
         SPEAKER_TOP_BACK_RIGHT = 0x20000
     }
-
-    #endregion
 }

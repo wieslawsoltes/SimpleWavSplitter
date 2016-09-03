@@ -3,14 +3,6 @@
 
 namespace WavFile
 {
-    #region References
-
-    using System;
-
-    #endregion
-
-    #region IProgress
-
     /// <summary>
     /// Interface used to report background task progress to UI
     /// </summary>
@@ -22,6 +14,4 @@ namespace WavFile
         /// <param name="value">Progress value</param>
         void Update(double value);
     }
-
-    #endregion
 }

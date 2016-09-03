@@ -1,28 +1,16 @@
 // Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
+using System.Linq;
+using WavFile;
 
 namespace SimpleWavSplitter.Console
 {
-    #region References
-
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using WavFile;
-
-    #endregion
-
-    #region Program
-
     /// <summary>
-    /// Console program
+    /// Wav file splitter console program.
     /// </summary>
     class Program
     {
-        #region Main
-
         static void Main(string[] args)
         {
             string fileName = string.Empty;
@@ -71,8 +59,8 @@ namespace SimpleWavSplitter.Console
             // show slit stats
             sw.Stop();
 
-            string stat1 = string.Format("Data bytes processed: {0} ({1} MB)", 
-                bytesTotal, 
+            string stat1 = string.Format("Data bytes processed: {0} ({1} MB)",
+                bytesTotal,
                 Math.Round((double)bytesTotal / (1024 * 1024), 1));
 
             System.Console.WriteLine(stat1);
@@ -85,9 +73,5 @@ namespace SimpleWavSplitter.Console
             // exit
             System.Environment.Exit(0);
         }
-
-        #endregion
     }
-
-    #endregion
 }
