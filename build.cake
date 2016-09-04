@@ -108,6 +108,16 @@ var buildDirs =
     GetDirectories("./tests/**/bin/" + dirSuffix) + 
     GetDirectories("./tests/**/obj/" + dirSuffix);
 
+var fileZipSuffix = isPlatformAnyCPU ? configuration + "-" + version + ".zip" : platform + "-" + configuration + "-" + version + ".zip";
+
+var zipSourceAvaloniaDirs = (DirectoryPath)Directory("./src/SimpleWavSplitter.Avalonia/bin/" + dirSuffix);
+var zipSourceWpfDirs = (DirectoryPath)Directory("./src/SimpleWavSplitter.Wpf/bin/" + dirSuffix);
+var zipSourceConsoleDirs = (DirectoryPath)Directory("./src/SimpleWavSplitter.Console/bin/" + dirSuffix);
+
+var zipTargetAvaloniaDirs = zipRoot.CombineWithFilePath("SimpleWavSplitter.Avalonia-" + fileZipSuffix);
+var zipTargetWpfDirs = zipRoot.CombineWithFilePath("SimpleWavSplitter.Wpf-" + fileZipSuffix);
+var zipTargetConsoleDirs = zipRoot.CombineWithFilePath("SimpleWavSplitter.Console-" + fileZipSuffix);
+
 ///////////////////////////////////////////////////////////////////////////////
 // NUGET NUSPECS
 ///////////////////////////////////////////////////////////////////////////////
@@ -288,6 +298,24 @@ Task("Zip-Files")
     .Does(() =>
 {
     Zip(docsSiteRoot, zipDocsSiteArtifacts);
+
+    Zip(zipSourceAvaloniaDirs, 
+        zipTargetAvaloniaDirs, 
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.dll") + 
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.exe"));
+
+    if (isRunningOnWindows)
+    {
+        Zip(zipSourceWpfDirs, 
+            zipTargetWpfDirs, 
+            GetFiles(zipSourceWpfDirs.FullPath + "/*.dll") + 
+            GetFiles(zipSourceWpfDirs.FullPath + "/*.exe"));
+    }
+
+    Zip(zipSourceConsoleDirs, 
+        zipTargetConsoleDirs, 
+        GetFiles(zipSourceConsoleDirs.FullPath + "/*.dll") + 
+        GetFiles(zipSourceConsoleDirs.FullPath + "/*.exe"));
 });
 
 Task("Create-NuGet-Packages")
