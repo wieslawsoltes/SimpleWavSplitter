@@ -18,60 +18,61 @@ namespace WavFile
         //
 
         /// <summary>
-        /// 
+        /// Chunk ID.
         /// </summary>
         public UInt32 ChunkID;          //  bytes=4
 
         /// <summary>
-        /// 
+        /// Chunk size.
         /// </summary>
         public UInt32 ChunkSize;        //  bytes=4
 
         /// <summary>
-        /// 
+        /// Format.
         /// </summary>
         public UInt32 Format;           //  bytes=4
+
         //
         // fmt                              bytes=24
         //
 
         /// <summary>
-        /// 
+        /// Sub-chunk 1 ID.
         /// </summary>
         public UInt32 Subchunk1ID;      //  bytes=4
 
         /// <summary>
-        /// 
+        /// Sub-chunk 1 size.
         /// </summary>
         public UInt32 Subchunk1Size;    //  bytes=4
 
         /// <summary>
-        /// 
+        /// Audio format.
         /// </summary>
         public UInt16 AudioFormat;      //  bytes=2
 
         /// <summary>
-        /// 
+        /// Channels number.
         /// </summary>
         public UInt16 NumChannels;      //  bytes=2
 
         /// <summary>
-        /// 
+        /// Sample rate.
         /// </summary>
         public UInt32 SampleRate;       //  bytes=4
 
         /// <summary>
-        /// 
+        /// Byte rate.
         /// </summary>
         public UInt32 ByteRate;         //  bytes=4
 
         /// <summary>
-        /// 
+        /// Block align.
         /// </summary>
         public UInt16 BlockAlign;       //  bytes=2
 
         /// <summary>
-        /// 
+        /// Bits per sample.
         /// </summary>
         public UInt16 BitsPerSample;    //  bytes=2
 
@@ -81,7 +82,7 @@ namespace WavFile
         //
 
         /// <summary>
-        /// 
+        /// Extra param size.
         /// </summary>
         public UInt16 ExtraParamSize;   //  bytes=2
 
@@ -90,17 +91,17 @@ namespace WavFile
         //
 
         /// <summary>
-        /// 
+        /// Samples.
         /// </summary>
         public UInt16 Samples;          //  bytes=2
 
         /// <summary>
-        /// 
+        /// Channel mask.
         /// </summary>
         public UInt32 ChannelMask;      //  bytes=4
 
         /// <summary>
-        /// 
+        /// Sub-format GUID.
         /// </summary>
         public Guid GuidSubFormat;      //  bytes=16
 
@@ -109,12 +110,12 @@ namespace WavFile
         //
 
         /// <summary>
-        /// 
+        /// Sub-chunk 2 ID.
         /// </summary>
         public UInt32 Subchunk2ID;      //  bytes=4
 
         /// <summary>
-        /// 
+        /// Sub-chunk 2 size.
         /// </summary>
         public UInt32 Subchunk2Size;    //  bytes=4
 
@@ -123,31 +124,31 @@ namespace WavFile
         //
 
         /// <summary>
-        /// 
+        /// Extensible flag.
         /// </summary>
         public bool IsExtensible;
 
         /// <summary>
-        /// 
+        /// Header size.
         /// </summary>
         public int HeaderSize;  // normal WAV = 44 bytes, extensible WAV = 44 + 24 = 68 bytes (without extra chunks)
 
         /// <summary>
-        /// 
+        /// Duration in seconds.
         /// </summary>
         public double Duration; // duration in seconds
 
         /// <summary>
-        /// 
+        /// Total samples.
         /// </summary>
         public long TotalSamples;
-        
+
         //
         // channel types
         //
 
         /// <summary>
-        /// 
+        /// Channel types.
         /// </summary>
         public static readonly IList<WavChannel> WavChannelTypes = new ReadOnlyCollection<WavChannel>(
             new[]
@@ -162,7 +163,7 @@ namespace WavFile
         //
 
         /// <summary>
-        /// 
+        /// Multi-channel types.
         /// </summary>
         public static readonly IList<WavChannel> WavMultiChannelTypes = new ReadOnlyCollection<WavChannel>(
             new[]
@@ -190,22 +191,22 @@ namespace WavFile
         // WAVEFORMATEXTENSIBLE sub-formats
 
         /// <summary>
-        /// 
+        /// Sub-type PCM.
         /// </summary>
-        public static readonly Guid subTypePCM = new Guid("00000001-0000-0010-8000-00aa00389b71");
+        public static readonly Guid SubTypePCM = new Guid("00000001-0000-0010-8000-00aa00389b71");
 
         /// <summary>
-        /// 
+        /// Sub-type IEEE FLOAT.
         /// </summary>
-        public static readonly Guid subTypeIEEE_FLOAT = new Guid("00000003-0000-0010-8000-00aa00389b71");
+        public static readonly Guid SubTypeIEEE_FLOAT = new Guid("00000003-0000-0010-8000-00aa00389b71");
 
         /// <summary>
-        /// 
+        /// Returns formated wav file header information of this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns> A string containing formated wav file header information.</returns>
         public override string ToString()
         {
-            return String.Format(
+            return string.Format(
                 "[WAVE]\n" +
                 "ChunkID:\t\t{0}\n" +
                 "ChunkSize:\t\t{1}\n" +
@@ -247,7 +248,7 @@ namespace WavFile
                 ExtraParamSize,
                 Samples,
                 ChannelMask,
-                GuidSubFormat.ToString() + " : " + ((GuidSubFormat == subTypePCM) ? "PCM" : ((GuidSubFormat == subTypeIEEE_FLOAT) ? "IEEE FLOAT" : "Unknown")),
+                GuidSubFormat.ToString() + " : " + ((GuidSubFormat == SubTypePCM) ? "PCM" : ((GuidSubFormat == SubTypeIEEE_FLOAT) ? "IEEE FLOAT" : "Unknown")),
                 Encoding.ASCII.GetString(BitConverter.GetBytes(Subchunk2ID)),
                 Subchunk2Size,
                 IsExtensible,

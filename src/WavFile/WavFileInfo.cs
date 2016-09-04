@@ -83,7 +83,7 @@ namespace WavFile
 
                     // Check sub-format.
                     h.GuidSubFormat = new Guid(SubFormat);
-                    if (h.GuidSubFormat != WavFileHeader.subTypePCM && h.GuidSubFormat != WavFileHeader.subTypeIEEE_FLOAT)
+                    if (h.GuidSubFormat != WavFileHeader.SubTypePCM && h.GuidSubFormat != WavFileHeader.SubTypeIEEE_FLOAT)
                     {
                         throw new Exception(String.Format("Not supported WAV file type: {0}", h.GuidSubFormat));
                     }
