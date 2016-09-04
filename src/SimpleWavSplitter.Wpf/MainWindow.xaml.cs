@@ -1,23 +1,25 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Microsoft.Win32;
 using WavFile;
 
-namespace SimpleWavSplitter
+namespace SimpleWavSplitter.Wpf
 {
     /// <summary>
     /// Main window.
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Task _task;
         private CancellationTokenSource _tokenSource;
 
         /// <summary>
@@ -32,13 +34,13 @@ namespace SimpleWavSplitter
 
             btnBrowseOutputPath.Click += (sender, e) => GetOutputPath();
             btnGetWavHeader.Click += (sender, e) => GetWavHeader();
-            btnSplitWavFiles.Click += (sender, e) => SplitWavFiles();
-            btnCancel.Click += (sender, e) => CancelSplitWorker();
+            btnSplitWavFiles.Click += async (sender, e) => await SplitWavFiles();
+            btnCancel.Click += async (sender, e) => await CancelSplitWavFiles();
         }
 
         private void GetOutputPath()
         {
-            System.Windows.Forms.FolderBrowserDialog dlg = new System.Windows.Forms.FolderBrowserDialog();
+            var dlg = new System.Windows.Forms.FolderBrowserDialog();
             string text = textOutputPath.Text;
             if (text.Length > 0)
             {
@@ -53,7 +55,7 @@ namespace SimpleWavSplitter
 
         private void GetWavHeader()
         {
-            var dlg = new Microsoft.Win32.OpenFileDialog();
+            var dlg = new OpenFileDialog();
             dlg.Filter = "WAV Files (*.wav)|*.wav|All Files (*.*)|*.*";
             dlg.FilterIndex = 0;
             dlg.Multiselect = true;
@@ -61,21 +63,23 @@ namespace SimpleWavSplitter
             if (dlg.ShowDialog() == true)
             {
                 string[] fileNames = dlg.FileNames;
-                var sb = new System.Text.StringBuilder();
+                var sb = new StringBuilder();
                 int totalFiles = 0;
                 foreach (string fileName in fileNames)
                 {
                     try
                     {
-                        using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                        using (var fs = File.OpenRead(fileName))
                         {
                             var h = WavFileInfo.ReadFileHeader(fs);
-                            string text = string.Format("FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}", Path.GetFileName(fileName), fs.Length.ToString(), h.ToString());
                             if (totalFiles > 0)
                             {
                                 sb.Append("\n\n");
                             }
-                            sb.Append(text);
+                            sb.Append(
+                                string.Format(
+                                    "FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}",
+                                    Path.GetFileName(fileName), fs.Length.ToString(), h.ToString()));
                             totalFiles++;
                         }
                     }
@@ -90,27 +94,27 @@ namespace SimpleWavSplitter
             }
         }
 
-        private void SplitWavFiles()
+        private async Task SplitWavFiles()
         {
-            var dlg = new Microsoft.Win32.OpenFileDialog();
+            var dlg = new OpenFileDialog();
             dlg.Filter = "WAV Files (*.wav)|*.wav|All Files (*.*)|*.*";
             dlg.FilterIndex = 0;
             dlg.Multiselect = true;
 
             if (dlg.ShowDialog() == true)
             {
-                SplitWavFiles(dlg.FileNames);
+                await SplitWavFiles(dlg.FileNames);
             }
         }
 
-        private void SplitWavFiles(string[] fileNames)
+        private async Task SplitWavFiles(string[] fileNames)
         {
             progress.Value = 0;
             _tokenSource = new CancellationTokenSource();
             CancellationToken ct = _tokenSource.Token;
 
-            var sw = System.Diagnostics.Stopwatch.StartNew();
-            var sb = new System.Text.StringBuilder();
+            var sw = Stopwatch.StartNew();
+            var sb = new StringBuilder();
 
             sb.Append(string.Format("Files to split: {0}\n", fileNames.Count()));
             textOutput.Text = sb.ToString();
@@ -122,23 +126,31 @@ namespace SimpleWavSplitter
                 userOutputPath += "\\";
             }
 
-            _task = Task<long>.Factory.StartNew(() =>
+            long totalBytesProcessed = await Task<long>.Factory.StartNew(() =>
             {
                 ct.ThrowIfCancellationRequested();
                 long countBytesTotal = 0;
-                var splitter = new WavFileSplitter(value => Dispatcher.Invoke(() => progress.Value = value));
+
+                var splitter = new WavFileSplitter(
+                    value => Dispatcher.Invoke(() => progress.Value = value));
 
                 foreach (string fileName in fileNames)
                 {
                     try
                     {
-                        string outputPath = userOutputPath.Length > 0 ? userOutputPath : fileName.Remove(fileName.Length - Path.GetFileName(fileName).Length);
-                        Dispatcher.Invoke(new Action(() =>
+                        string outputPath = userOutputPath.Length > 0 ?
+                            userOutputPath :
+                            fileName.Remove(fileName.Length - Path.GetFileName(fileName).Length);
+
+                        Dispatcher.Invoke(() =>
                         {
-                            string text = string.Format("Split file: {0}\n", Path.GetFileName(fileName));
-                            sb.Append(text);
+                            sb.Append(
+                                string.Format(
+                                    "Split file: {0}\n",
+                                    Path.GetFileName(fileName)));
                             textOutput.Text = sb.ToString();
-                        }));
+                        });
+
                         countBytesTotal += splitter.SplitWavFile(fileName, outputPath, ct);
                     }
                     catch (Exception ex)
@@ -152,30 +164,26 @@ namespace SimpleWavSplitter
                     }
                 }
                 return countBytesTotal;
-            })
-            .ContinueWith((totalBytesProcessed) =>
+            }, ct);
+
+            sw.Stop();
+            if (_tokenSource.IsCancellationRequested == false)
             {
-                sw.Stop();
-                if (_tokenSource.IsCancellationRequested == false)
-                {
-                    string text = string.Format(
-                        "Done.\nData bytes processed: {0} ({1} MB)\nElapsed time: {2}\n",
-                        totalBytesProcessed.Result,
-                        Math.Round((double)totalBytesProcessed.Result / (1024 * 1024), 1),
-                        sw.Elapsed);
-                    sb.Append(text);
-                    textOutput.Text = sb.ToString();
-                }
-                progress.Value = 0;
-            },
-            TaskScheduler.FromCurrentSynchronizationContext());
+                string text = string.Format(
+                    "Done.\nData bytes processed: {0} ({1} MB)\nElapsed time: {2}\n",
+                    totalBytesProcessed,
+                    Math.Round((double)totalBytesProcessed / (1024 * 1024), 1),
+                    sw.Elapsed);
+                sb.Append(text);
+                textOutput.Text = sb.ToString();
+            }
         }
 
-        private void CancelSplitWorker()
+        private async Task CancelSplitWavFiles()
         {
-            if (_task != null && _tokenSource != null)
+            if (_tokenSource != null)
             {
-                _tokenSource.Cancel();
+                await Task.Factory.StartNew(() => _tokenSource.Cancel());
             }
             progress.Value = 0;
         }

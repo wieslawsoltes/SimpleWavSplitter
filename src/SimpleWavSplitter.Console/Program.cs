@@ -34,8 +34,10 @@ namespace SimpleWavSplitter.Console
             else
             {
                 var v = Assembly.GetExecutingAssembly().GetName().Version;
-                var title = string.Format("SimpleWavSplitterConsole v{0}.{1}.{2}", v.Major, v.Minor, v.Build);
-                WriteLine(title);
+                WriteLine(
+                    string.Format(
+                        "SimpleWavSplitterConsole v{0}.{1}.{2}",
+                        v.Major, v.Minor, v.Build));
                 Write(Environment.NewLine);
                 WriteLine("Usage:");
                 WriteLine("SimpleWavSplitter.Console <file.wav> [<OutputPath>]");
@@ -45,12 +47,17 @@ namespace SimpleWavSplitter.Console
             try
             {
                 long bytesTotal = 0;
-                var splitter = new WavFileSplitter(value => Write(string.Format("\rProgress: {0:0.0}%", value)));
+                var splitter = new WavFileSplitter(
+                    value => Write(string.Format("\rProgress: {0:0.0}%", value)));
                 var sw = Stopwatch.StartNew();
                 bytesTotal = splitter.SplitWavFile(fileName, outputPath, CancellationToken.None);
                 sw.Stop();
                 Write(Environment.NewLine);
-                WriteLine(string.Format("Data bytes processed: {0} ({1} MB)", bytesTotal, Round((double)bytesTotal / (1024 * 1024), 1)));
+                WriteLine(
+                    string.Format(
+                        "Data bytes processed: {0} ({1} MB)",
+                        bytesTotal,
+                        Round((double)bytesTotal / (1024 * 1024), 1)));
                 WriteLine(string.Format("Elapsed time: {0}", sw.Elapsed));
                 Environment.Exit(0);
             }

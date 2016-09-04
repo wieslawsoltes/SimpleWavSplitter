@@ -8,8 +8,8 @@
     <ProjectGuid>{746BB582-59A3-409A-A9C9-53CCFC287D3F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleWavSplitter</RootNamespace>
-    <AssemblyName>SimpleWavSplitter</AssemblyName>
+    <RootNamespace>SimpleWavSplitter.Wpf</RootNamespace>
+    <AssemblyName>SimpleWavSplitter.Wpf</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
