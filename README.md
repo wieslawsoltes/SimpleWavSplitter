@@ -116,12 +116,11 @@ string fileName = "test.wav";
 
 using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
 {
-    var h = WavFileInfo.ReadFileHeader(f);
-    Write(string.Format(
-        "FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}", 
-        Path.GetFileName(fileName), 
-        f.Length.ToString(), 
-        h.ToString()));
+    var h = WavFileInfo.ReadFileHeader(fs);
+    Write(
+        string.Format(
+            "FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}", 
+            Path.GetFileName(fileName), fs.Length, h));
 }
 ```
 
