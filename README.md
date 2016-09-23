@@ -18,8 +18,8 @@ Split multi-channel WAV files into single channel WAV files.
 
 | Package                     | Latest release                                                                                                                                    | Pre-release                                                                                                                                          |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SimpleWavSplitter.Avalonia  | [![Chocolatey](https://img.shields.io/chocolatey/v/SimpleWavSplitter.Avalonia.svg)](https://chocolatey.org/packages/SimpleWavSplitter.Avalonia)   | [![Chocolatey](https://img.shields.io/chocolatey/vpre/SimpleWavSplitter.Avalonia.svg)](https://chocolatey.org/packages/SimpleWavSplitter.Avalonia)   |
-| SimpleWavSplitter.Wpf       | [![Chocolatey](https://img.shields.io/chocolatey/v/SimpleWavSplitter.Wpf.svg)](https://chocolatey.org/packages/SimpleWavSplitter.Wpf)             | [![Chocolatey](https://img.shields.io/chocolatey/vpre/SimpleWavSplitter.Wpf.svg)](https://chocolatey.org/packages/SimpleWavSplitter.Wpf)             |
+| SimpleWavSplitter-Avalonia  | [![Chocolatey](https://img.shields.io/chocolatey/v/SimpleWavSplitter-Avalonia.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Avalonia)   | [![Chocolatey](https://img.shields.io/chocolatey/vpre/SimpleWavSplitter-Avalonia.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Avalonia)   |
+| SimpleWavSplitter-Wpf       | [![Chocolatey](https://img.shields.io/chocolatey/v/SimpleWavSplitter-Wpf.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Wpf)             | [![Chocolatey](https://img.shields.io/chocolatey/vpre/SimpleWavSplitter-Wpf.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Wpf)             |
 
 ## NuGet
 
