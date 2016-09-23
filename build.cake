@@ -187,12 +187,11 @@ var nuspecChocolateySettings = new Dictionary<ChocolateyPackSettings, DirectoryP
 nuspecChocolateySettings.Add(
     new ChocolateyPackSettings
     {
-        Id = "SimpleWavSplitter.Avalonia",
+        Id = "SimpleWavSplitter-Avalonia",
         Title = "SimpleWavSplitter (Avalonia)",
         OutputDirectory = chocolateyRoot
     },
     zipSourceAvaloniaDirs);
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // src: SimpleWavSplitter.Wpf
@@ -200,7 +199,7 @@ nuspecChocolateySettings.Add(
 nuspecChocolateySettings.Add(
     new ChocolateyPackSettings
     {
-        Id = "SimpleWavSplitter.Wpf",
+        Id = "SimpleWavSplitter-Wpf",
         Title = "SimpleWavSplitter (WPF)",
         OutputDirectory = chocolateyRoot
     },
