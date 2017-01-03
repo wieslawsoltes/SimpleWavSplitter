@@ -14,14 +14,14 @@ Split multi-channel WAV files into single channel WAV files.
 * To build program use Microsoft Visual C# 2015.
 * Download are available at: https://github.com/wieslawsoltes/SimpleWavSplitter
 
-## Install
+### Install
 
 | Package                     | Latest release                                                                                                                                    | Pre-release                                                                                                                                          |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | SimpleWavSplitter-Avalonia  | [![Chocolatey](https://img.shields.io/chocolatey/v/SimpleWavSplitter-Avalonia.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Avalonia)   | [![Chocolatey](https://img.shields.io/chocolatey/vpre/SimpleWavSplitter-Avalonia.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Avalonia)   |
 | SimpleWavSplitter-Wpf       | [![Chocolatey](https://img.shields.io/chocolatey/v/SimpleWavSplitter-Wpf.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Wpf)             | [![Chocolatey](https://img.shields.io/chocolatey/vpre/SimpleWavSplitter-Wpf.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Wpf)             |
 
-## Download
+### Download
 
 | Platforn                               | Type        | Version       | Download                                                                                                                                                                  |
 |----------------------------------------|-------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -29,7 +29,7 @@ Split multi-channel WAV files into single channel WAV files.
 | Windows/Linux/OSX (GUI mono/Avalonia)  | Portable    | 0.3.35        | [SimpleWavSplitter.Avalonia-Release-0.3.3.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Avalonia-Release-0.3.3.zip)   |
 | Windows/Linux/OSX (console mono/WPF)   | Portable    | 0.3.3         | [SimpleWavSplitter.Console-Release-0.3.3.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Console-Release-0.3.3.zip)     |
 
-## Mirrors
+### Mirrors
 
 [![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-Editors-Recorders/SimpleWavSplitter.shtml)
 
