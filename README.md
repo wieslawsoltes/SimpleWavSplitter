@@ -26,8 +26,8 @@ Split multi-channel WAV files into single channel WAV files.
 | Platforn                               | Type        | Version       | Download                                                                                                                                                                  |
 |----------------------------------------|-------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Windows (GUI .NET4.5/WPF)              | Portable    | 0.3.3         | [SimpleWavSplitter.Wpf-Release-0.3.3.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Wpf-Release-0.3.3.zip)             |
-| Windows/Linux/OSX (GUI mono/Avalonia)  | Portable    | 0.3.35        | [SimpleWavSplitter.Avalonia-Release-0.3.3.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Avalonia-Release-0.3.3.zip)   |
-| Windows/Linux/OSX (console mono/WPF)   | Portable    | 0.3.3         | [SimpleWavSplitter.Console-Release-0.3.3.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Console-Release-0.3.3.zip)     |
+| Windows/Linux/OSX (GUI mono/Avalonia)  | Portable    | 0.3.3         | [SimpleWavSplitter.Avalonia-Release-0.3.3.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Avalonia-Release-0.3.3.zip)   |
+| Windows/Linux/OSX (Console mono/WPF)   | Portable    | 0.3.3         | [SimpleWavSplitter.Console-Release-0.3.3.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Console-Release-0.3.3.zip)     |
 
 ### Mirrors
 
