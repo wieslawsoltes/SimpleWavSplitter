@@ -157,11 +157,7 @@ namespace SimpleWavSplitter.Avalonia
                 long countBytesTotal = 0;
 
                 var splitter = new WavFileSplitter(
-                    value => Dispatcher.UIThread.InvokeAsync(() =>
-                    {
-                    progress.Value = value;
-                        //Thread.Sleep(100);
-                    }));
+                    value => Dispatcher.UIThread.InvokeAsync(() => progress.Value = value));
 
                 foreach (string fileName in fileNames)
                 {
