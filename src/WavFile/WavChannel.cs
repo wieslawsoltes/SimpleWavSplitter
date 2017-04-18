@@ -15,17 +15,26 @@ namespace WavFile
         /// <summary>
         /// Gets wav channel long name.
         /// </summary>
-        public string LongName { get { return _longName; } }
+        public string LongName
+        {
+            get { return _longName; }
+        }
 
         /// <summary>
         /// Gets wav channel short name.
         /// </summary>
-        public string ShortName { get { return _shortName; } }
+        public string ShortName
+        {
+            get { return _shortName; }
+        }
 
         /// <summary>
         /// Gets wav channel mask.
         /// </summary>
-        public WavChannelMask Mask { get { return _mask; } }
+        public WavChannelMask Mask
+        {
+            get { return _mask; }
+        }
 
         /// <summary>
         /// Initializes new instance of the <see cref="WavChannel"/> struct.
