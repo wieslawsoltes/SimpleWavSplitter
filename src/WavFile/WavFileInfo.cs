@@ -45,8 +45,10 @@ namespace WavFile
             h.HeaderSize += 24;
 
             // Read PCM data or extensible data if exists.
-            if (h.Subchunk1Size == 16 && h.AudioFormat == 1) // PCM
+            if (h.Subchunk1Size == 16 && h.AudioFormat == 1)
             {
+                // PCM
+
                 h.IsExtensible = false;
 
                 // Note: 8-bit samples are stored as unsigned bytes, ranging from 0 to 255. 16-bit samples are stored as 2's-complement signed integers, ranging from -32768 to 32767.
@@ -56,14 +58,18 @@ namespace WavFile
 
                 h.HeaderSize += 8;
             }
-            else if (h.Subchunk1Size > 16 && h.AudioFormat == 0xFFFE) // WAVEFORMATEXTENSIBLE
+            else if (h.Subchunk1Size > 16 && h.AudioFormat == 0xFFFE)
             {
+                // WAVEFORMATEXTENSIBLE
+
                 // read WAVEFORMATEXTENSIBLE
                 h.ExtraParamSize = b.ReadUInt16();
                 h.HeaderSize += 2;
 
-                if (h.ExtraParamSize == 22) // if cbSize is set to 22 => WAVEFORMATEXTENSIBLE
+                if (h.ExtraParamSize == 22)
                 {
+                    // if cbSize is set to 22 => WAVEFORMATEXTENSIBLE
+
                     h.IsExtensible = true;
 
                     //union {
@@ -94,8 +100,10 @@ namespace WavFile
                         UInt32 chunk = b.ReadUInt32();
                         h.HeaderSize += 4;
 
-                        if (chunk == 0x61746164) // "data" chunk
+                        if (chunk == 0x61746164)
                         {
+                            // "data" chunk
+
                             h.Subchunk2ID = chunk;              // 0x61746164, "data"
                             h.Subchunk2Size = b.ReadUInt32();   // NumSamples * NumChannels * BitsPerSample/8
 
@@ -162,13 +170,17 @@ namespace WavFile
             b.Write(h.BitsPerSample);
 
             // Write PCM data or extensible data if exists.
-            if (h.Subchunk1Size == 16 && h.AudioFormat == 1) // PCM
+            if (h.Subchunk1Size == 16 && h.AudioFormat == 1)
             {
+                // PCM
+
                 b.Write((UInt32)0x61746164); // 0x61746164, "data"
                 b.Write(h.Subchunk2Size);
             }
-            else if (h.Subchunk1Size > 16 && h.AudioFormat == 0xFFFE) // WAVEFORMATEXTENSIBLE
+            else if (h.Subchunk1Size > 16 && h.AudioFormat == 0xFFFE)
             {
+                // WAVEFORMATEXTENSIBLE
+
                 // Write WAVEFORMATEXTENSIBLE
                 b.Write(h.ExtraParamSize);
 
