@@ -13,9 +13,7 @@ namespace WavFile
     /// </summary>
     public struct WavFileHeader
     {
-        //
         // WAVE                             bytes=12
-        //
 
         /// <summary>
         /// Chunk ID.
@@ -32,9 +30,7 @@ namespace WavFile
         /// </summary>
         public UInt32 Format;           //  bytes=4
 
-        //
         // fmt                              bytes=24
-        //
 
         /// <summary>
         /// Sub-chunk 1 ID.
@@ -76,19 +72,15 @@ namespace WavFile
         /// </summary>
         public UInt16 BitsPerSample;    //  bytes=2
 
-        //
         // extra                            bytes=2
         // if h.Subchunk1Size > 16
-        //
 
         /// <summary>
         /// Extra param size.
         /// </summary>
         public UInt16 ExtraParamSize;   //  bytes=2
 
-        //
         // extensible                       bytes=22
-        //
 
         /// <summary>
         /// Samples.
@@ -105,9 +97,7 @@ namespace WavFile
         /// </summary>
         public Guid GuidSubFormat;      //  bytes=16
 
-        //
         // data                             bytes=8
-        //
 
         /// <summary>
         /// Sub-chunk 2 ID.
@@ -119,9 +109,7 @@ namespace WavFile
         /// </summary>
         public UInt32 Subchunk2Size;    //  bytes=4
 
-        //
         // info
-        //
 
         /// <summary>
         /// Extensible flag.
@@ -143,10 +131,6 @@ namespace WavFile
         /// </summary>
         public long TotalSamples;
 
-        //
-        // channel types
-        //
-
         /// <summary>
         /// Channel types.
         /// </summary>
@@ -157,10 +141,6 @@ namespace WavFile
                  new WavChannel ("Left",                    "L",   0                                                ),
                  new WavChannel ("Right",                   "R",   0                                                )
             });
-
-        //
-        // multi-channel types
-        //
 
         /// <summary>
         /// Multi-channel types.
