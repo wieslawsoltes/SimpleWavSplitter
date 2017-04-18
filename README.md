@@ -8,6 +8,8 @@
 [![NuGet](https://img.shields.io/nuget/v/WavFile.svg)](https://www.nuget.org/packages/WavFile)
 [![MyGet](https://img.shields.io/myget/simplewavsplitter-nightly/vpre/WavFile.svg?label=myget)](https://www.myget.org/gallery/simplewavsplitter-nightly) 
 
+[![CodeFactor](https://www.codefactor.io/repository/github/wieslawsoltes/simplewavsplitter/badge/master)](https://www.codefactor.io/repository/github/wieslawsoltes/simplewavsplitter/overview/master)
+
 Split multi-channel WAV files into single channel WAV files.
 
 * To run program please install .NET Framework Version 4.5
