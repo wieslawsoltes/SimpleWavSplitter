@@ -1,17 +1,10 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using WavFile;
 
 namespace SimpleWavSplitter.Avalonia
 {
@@ -20,7 +13,7 @@ namespace SimpleWavSplitter.Avalonia
     /// </summary>
     public class MainWindow : Window
     {
-        private CancellationTokenSource _tokenSource;
+        private SimpleWavFileSplitter _wavFileSplitter;
         private Button btnGetWavHeader;
         private ProgressBar progress;
         private Button btnCancel;
@@ -37,6 +30,8 @@ namespace SimpleWavSplitter.Avalonia
             this.InitializeComponent();
             App.AttachDevTools(this);
 
+            _wavFileSplitter = new SimpleWavFileSplitter();
+
             btnGetWavHeader = this.FindControl<Button>("btnGetWavHeader");
             progress = this.FindControl<ProgressBar>("progress");
             btnCancel = this.FindControl<Button>("btnCancel");
@@ -45,13 +40,14 @@ namespace SimpleWavSplitter.Avalonia
             btnBrowseOutputPath = this.FindControl<Button>("btnBrowseOutputPath");
             textOutput = this.FindControl<TextBox>("textOutput");
 
-            var v = Assembly.GetExecutingAssembly().GetName().Version;
-            Title = string.Format("SimpleWavSplitter v{0}.{1}.{2}", v.Major, v.Minor, v.Build);
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            Title = string.Format("SimpleWavSplitter v{0}.{1}.{2}", version.Major, version.Minor, version.Build);
 
             btnBrowseOutputPath.Click += async (sender, e) => await GetOutputPath();
             btnGetWavHeader.Click += async (sender, e) => await GetWavHeader();
             btnSplitWavFiles.Click += async (sender, e) => await SplitWavFiles();
-            btnCancel.Click += async (sender, e) => await CancelSplitWavFiles();
+            btnCancel.Click += async (sender, e) => await _wavFileSplitter.CancelSplitWavFiles(
+                value => Dispatcher.UIThread.InvokeAsync(() => progress.Value = value));
         }
 
         private void InitializeComponent()
@@ -86,7 +82,7 @@ namespace SimpleWavSplitter.Avalonia
             var result = await dlg.ShowAsync();
             if (result != null)
             {
-                GetWavHeader(result, (text) => textOutput.Text = text);
+                _wavFileSplitter.GetWavHeader(result, text => textOutput.Text = text);
             }
         }
 
@@ -100,120 +96,12 @@ namespace SimpleWavSplitter.Avalonia
             var result = await dlg.ShowAsync();
             if (result != null)
             {
-                await SplitWavFiles(
+                await _wavFileSplitter.SplitWavFiles(
                     result,
-                    (text) => Dispatcher.UIThread.InvokeAsync(() => textOutput.Text = text));
+                    textOutputPath.Text,
+                    value => Dispatcher.UIThread.InvokeAsync(() => progress.Value = value),
+                    text => Dispatcher.UIThread.InvokeAsync(() => textOutput.Text = text));
             }
-        }
-
-        private void GetWavHeader(string[] fileNames, Action<string> setOutput)
-        {
-            var sb = new StringBuilder();
-            int totalFiles = 0;
-            foreach (string fileName in fileNames)
-            {
-                try
-                {
-                    using (var fs = File.OpenRead(fileName))
-                    {
-                        var h = WavFileInfo.ReadFileHeader(fs);
-                        if (totalFiles > 0)
-                        {
-                            sb.Append("\n\n");
-                        }
-                        sb.Append(
-                            string.Format(
-                                "FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}",
-                                Path.GetFileName(fileName), fs.Length.ToString(), h.ToString()));
-                        totalFiles++;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string text = string.Format("Error: {0}\n", ex.Message);
-                    sb.Append(text);
-                    setOutput(sb.ToString());
-                }
-            }
-            setOutput(sb.ToString());
-        }
-
-        private async Task SplitWavFiles(string[] fileNames, Action<string> setOutput)
-        {
-            progress.Value = 0;
-            _tokenSource = new CancellationTokenSource();
-            CancellationToken ct = _tokenSource.Token;
-
-            var sw = Stopwatch.StartNew();
-            var sb = new StringBuilder();
-
-            sb.Append(string.Format("Files to split: {0}\n", fileNames.Count()));
-            textOutput.Text = sb.ToString();
-
-            string userOutputPath = textOutputPath.Text;
-
-            if (userOutputPath.EndsWith("\\") == false && userOutputPath.Length > 0)
-            {
-                userOutputPath += "\\";
-            }
-
-            long totalBytesProcessed = await Task<long>.Factory.StartNew(() =>
-            {
-                ct.ThrowIfCancellationRequested();
-                long countBytesTotal = 0;
-
-                var splitter = new WavFileSplitter(
-                    value => Dispatcher.UIThread.InvokeAsync(() => progress.Value = value));
-
-                foreach (string fileName in fileNames)
-                {
-                    try
-                    {
-                        string outputPath = userOutputPath.Length > 0 ?
-                            userOutputPath :
-                            fileName.Remove(fileName.Length - Path.GetFileName(fileName).Length);
-
-                        sb.Append(
-                            string.Format(
-                                "Split file: {0}\n",
-                                Path.GetFileName(fileName)));
-
-                        setOutput(sb.ToString());
-
-                        countBytesTotal += splitter.SplitWavFile(fileName, outputPath, ct);
-                    }
-                    catch (Exception ex)
-                    {
-                        sb.Append(string.Format("Error: {0}\n", ex.Message));
-
-                        setOutput(sb.ToString());
-
-                        return countBytesTotal;
-                    }
-                }
-                return countBytesTotal;
-            }, ct);
-
-            sw.Stop();
-            if (_tokenSource.IsCancellationRequested == false)
-            {
-                string text = string.Format(
-                    "Done.\nData bytes processed: {0} ({1} MB)\nElapsed time: {2}\n",
-                    totalBytesProcessed,
-                    Math.Round((double)totalBytesProcessed / (1024 * 1024), 1),
-                    sw.Elapsed);
-                sb.Append(text);
-                setOutput(sb.ToString());
-            }
-        }
-
-        private async Task CancelSplitWavFiles()
-        {
-            if (_tokenSource != null)
-            {
-                await Task.Factory.StartNew(() => _tokenSource.Cancel());
-            }
-            progress.Value = 0;
         }
     }
 }
