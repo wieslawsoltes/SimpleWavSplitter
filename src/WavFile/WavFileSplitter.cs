@@ -51,8 +51,8 @@ namespace WavFile
             {
                 for (int c = 0; c < header.NumChannels; c++)
                 {
-                    string chNum = (c + 1).ToString("D2");
-                    var ch = new WavChannel("Channel" + chNum, "CH" + chNum, 0);
+                    string numnber = (c + 1).ToString("D2");
+                    var ch = new WavChannel("Channel" + numnber, "CH" + numnber, 0);
                     channels[c] = ch;
                 }
             }
