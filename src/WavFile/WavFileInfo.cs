@@ -217,7 +217,7 @@ namespace WavFile
 
             // data
             mh.Subchunk2ID = (UInt32)0x61746164; // 0x61746164, "data"
-            mh.Subchunk2Size = (h.Subchunk2Size / h.NumChannels); // NumSamples * NumChannels * BitsPerSample/8
+            mh.Subchunk2Size = h.Subchunk2Size / h.NumChannels; // NumSamples * NumChannels * BitsPerSample/8
 
             // info
             mh.IsExtensible = false;
