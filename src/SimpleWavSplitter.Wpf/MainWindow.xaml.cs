@@ -62,36 +62,40 @@ namespace SimpleWavSplitter.Wpf
 
             if (dlg.ShowDialog() == true)
             {
-                string[] fileNames = dlg.FileNames;
-                var sb = new StringBuilder();
-                int totalFiles = 0;
-                foreach (string fileName in fileNames)
+                GetWavHeader(dlg.FileNames);
+            }
+        }
+
+        private void GetWavHeader(string[] fileNames)
+        {
+            var sb = new StringBuilder();
+            int totalFiles = 0;
+            foreach (string fileName in fileNames)
+            {
+                try
                 {
-                    try
+                    using (var fs = File.OpenRead(fileName))
                     {
-                        using (var fs = File.OpenRead(fileName))
+                        var h = WavFileInfo.ReadFileHeader(fs);
+                        if (totalFiles > 0)
                         {
-                            var h = WavFileInfo.ReadFileHeader(fs);
-                            if (totalFiles > 0)
-                            {
-                                sb.Append("\n\n");
-                            }
-                            sb.Append(
-                                string.Format(
-                                    "FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}",
-                                    Path.GetFileName(fileName), fs.Length.ToString(), h.ToString()));
-                            totalFiles++;
+                            sb.Append("\n\n");
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        string text = string.Format("Error: {0}\n", ex.Message);
-                        sb.Append(text);
-                        textOutput.Text = sb.ToString();
+                        sb.Append(
+                            string.Format(
+                                "FileName:\t\t{0}\nFileSize:\t\t{1}\n{2}",
+                                Path.GetFileName(fileName), fs.Length.ToString(), h.ToString()));
+                        totalFiles++;
                     }
                 }
-                textOutput.Text = sb.ToString();
+                catch (Exception ex)
+                {
+                    string text = string.Format("Error: {0}\n", ex.Message);
+                    sb.Append(text);
+                    textOutput.Text = sb.ToString();
+                }
             }
+            textOutput.Text = sb.ToString();
         }
 
         private async Task SplitWavFiles()
