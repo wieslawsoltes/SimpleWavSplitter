@@ -18,9 +18,10 @@ namespace WavFile
         /// <returns>The new instance of the <see cref="WavFileHeader"/> struct.</returns>
         public static WavFileHeader ReadFileHeader(FileStream fs)
         {
-            var h = new WavFileHeader();
-
-            h.HeaderSize = 0;
+            var h = new WavFileHeader()
+            {
+                HeaderSize = 0
+            };
 
             // Read WAV header.
             var b = new BinaryReader(fs);
