@@ -62,11 +62,26 @@ namespace SimpleWavSplitter.Wpf
 
             if (dlg.ShowDialog() == true)
             {
-                GetWavHeader(dlg.FileNames);
+                GetWavHeader(dlg.FileNames, (text) => textOutput.Text = text);
             }
         }
 
-        private void GetWavHeader(string[] fileNames)
+        private async Task SplitWavFiles()
+        {
+            var dlg = new OpenFileDialog();
+            dlg.Filter = "WAV Files (*.wav)|*.wav|All Files (*.*)|*.*";
+            dlg.FilterIndex = 0;
+            dlg.Multiselect = true;
+
+            if (dlg.ShowDialog() == true)
+            {
+                await SplitWavFiles(
+                    dlg.FileNames,
+                    (text) => Dispatcher.Invoke(() => textOutput.Text = text));
+            }
+        }
+
+        private void GetWavHeader(string[] fileNames, Action<string> setOutput)
         {
             var sb = new StringBuilder();
             int totalFiles = 0;
@@ -92,26 +107,13 @@ namespace SimpleWavSplitter.Wpf
                 {
                     string text = string.Format("Error: {0}\n", ex.Message);
                     sb.Append(text);
-                    textOutput.Text = sb.ToString();
+                    setOutput(sb.ToString());
                 }
             }
-            textOutput.Text = sb.ToString();
+            setOutput(sb.ToString());
         }
 
-        private async Task SplitWavFiles()
-        {
-            var dlg = new OpenFileDialog();
-            dlg.Filter = "WAV Files (*.wav)|*.wav|All Files (*.*)|*.*";
-            dlg.FilterIndex = 0;
-            dlg.Multiselect = true;
-
-            if (dlg.ShowDialog() == true)
-            {
-                await SplitWavFiles(dlg.FileNames);
-            }
-        }
-
-        private async Task SplitWavFiles(string[] fileNames)
+        private async Task SplitWavFiles(string[] fileNames, Action<string> setOutput)
         {
             progress.Value = 0;
             _tokenSource = new CancellationTokenSource();
@@ -146,24 +148,21 @@ namespace SimpleWavSplitter.Wpf
                             userOutputPath :
                             fileName.Remove(fileName.Length - Path.GetFileName(fileName).Length);
 
-                        Dispatcher.Invoke(() =>
-                        {
-                            sb.Append(
-                                string.Format(
-                                    "Split file: {0}\n",
-                                    Path.GetFileName(fileName)));
-                            textOutput.Text = sb.ToString();
-                        });
+                        sb.Append(
+                            string.Format(
+                                "Split file: {0}\n",
+                                Path.GetFileName(fileName)));
+
+                        setOutput(sb.ToString());
 
                         countBytesTotal += splitter.SplitWavFile(fileName, outputPath, ct);
                     }
                     catch (Exception ex)
                     {
-                        Dispatcher.Invoke(() =>
-                        {
-                            sb.Append(string.Format("Error: {0}\n", ex.Message));
-                            textOutput.Text = sb.ToString();
-                        });
+                        sb.Append(string.Format("Error: {0}\n", ex.Message));
+
+                        setOutput(sb.ToString());
+
                         return countBytesTotal;
                     }
                 }
@@ -179,7 +178,7 @@ namespace SimpleWavSplitter.Wpf
                     Math.Round((double)totalBytesProcessed / (1024 * 1024), 1),
                     sw.Elapsed);
                 sb.Append(text);
-                textOutput.Text = sb.ToString();
+                setOutput(sb.ToString());
             }
         }
 

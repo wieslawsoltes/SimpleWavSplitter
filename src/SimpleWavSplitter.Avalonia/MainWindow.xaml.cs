@@ -86,11 +86,27 @@ namespace SimpleWavSplitter.Avalonia
             var result = await dlg.ShowAsync();
             if (result != null)
             {
-                GetWavHeader(result);
+                GetWavHeader(result, (text) => textOutput.Text = text);
             }
         }
 
-        private void GetWavHeader(string[] fileNames)
+        private async Task SplitWavFiles()
+        {
+            var dlg = new OpenFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "WAV Files", Extensions = { "wav" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.AllowMultiple = true;
+
+            var result = await dlg.ShowAsync();
+            if (result != null)
+            {
+                await SplitWavFiles(
+                    result,
+                    (text) => Dispatcher.UIThread.InvokeAsync(() => textOutput.Text = text));
+            }
+        }
+
+        private void GetWavHeader(string[] fileNames, Action<string> setOutput)
         {
             var sb = new StringBuilder();
             int totalFiles = 0;
@@ -116,27 +132,13 @@ namespace SimpleWavSplitter.Avalonia
                 {
                     string text = string.Format("Error: {0}\n", ex.Message);
                     sb.Append(text);
-                    textOutput.Text = sb.ToString();
+                    setOutput(sb.ToString());
                 }
             }
-            textOutput.Text = sb.ToString();
+            setOutput(sb.ToString());
         }
 
-        private async Task SplitWavFiles()
-        {
-            var dlg = new OpenFileDialog();
-            dlg.Filters.Add(new FileDialogFilter() { Name = "WAV Files", Extensions = { "wav" } });
-            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
-            dlg.AllowMultiple = true;
-
-            var result = await dlg.ShowAsync();
-            if (result != null)
-            {
-                await SplitWavFiles(result);
-            }
-        }
-
-        private async Task SplitWavFiles(string[] fileNames)
+        private async Task SplitWavFiles(string[] fileNames, Action<string> setOutput)
         {
             progress.Value = 0;
             _tokenSource = new CancellationTokenSource();
@@ -171,24 +173,21 @@ namespace SimpleWavSplitter.Avalonia
                             userOutputPath :
                             fileName.Remove(fileName.Length - Path.GetFileName(fileName).Length);
 
-                        Dispatcher.UIThread.InvokeAsync(() =>
-                        {
-                            sb.Append(
-                                string.Format(
-                                    "Split file: {0}\n",
-                                    Path.GetFileName(fileName)));
-                            textOutput.Text = sb.ToString();
-                        });
+                        sb.Append(
+                            string.Format(
+                                "Split file: {0}\n",
+                                Path.GetFileName(fileName)));
+
+                        setOutput(sb.ToString());
 
                         countBytesTotal += splitter.SplitWavFile(fileName, outputPath, ct);
                     }
                     catch (Exception ex)
                     {
-                        Dispatcher.UIThread.InvokeAsync(() =>
-                        {
-                            sb.Append(string.Format("Error: {0}\n", ex.Message));
-                            textOutput.Text = sb.ToString();
-                        });
+                        sb.Append(string.Format("Error: {0}\n", ex.Message));
+
+                        setOutput(sb.ToString());
+
                         return countBytesTotal;
                     }
                 }
@@ -204,7 +203,7 @@ namespace SimpleWavSplitter.Avalonia
                     Math.Round((double)totalBytesProcessed / (1024 * 1024), 1),
                     sw.Elapsed);
                 sb.Append(text);
-                textOutput.Text = sb.ToString();
+                setOutput(sb.ToString());
             }
         }
 
