@@ -62,6 +62,11 @@ Does not require any external dependencies.
 
 ## Using SimpleWavSplitter
 
+Please check first the sample apps and the [helper class](https://github.com/wieslawsoltes/SimpleWavSplitter/blob/master/src/SimpleWavSplitter.Shared/SimpleWavFileSplitter.cs).
+* SimpleWavSplitter.Console
+* SimpleWavSplitter.Wpf
+* SimpleWavSplitter.Avalonia
+
 ### Split Wav Files
 
 ```C#
