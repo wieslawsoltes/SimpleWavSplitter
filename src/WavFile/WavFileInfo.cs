@@ -80,12 +80,12 @@ namespace WavFile
                     h.ChannelMask = b.ReadUInt32();
 
                     // GUID SubFormat
-                    byte[] SubFormat = b.ReadBytes(16);
+                    byte[] subFormat = b.ReadBytes(16);
 
                     h.HeaderSize += 22;
 
                     // Check sub-format.
-                    h.GuidSubFormat = new Guid(SubFormat);
+                    h.GuidSubFormat = new Guid(subFormat);
                     if (h.GuidSubFormat != WavFileHeader.SubTypePCM && h.GuidSubFormat != WavFileHeader.SubTypeIEEE_FLOAT)
                     {
                         throw new Exception(String.Format("Not supported WAV file type: {0}", h.GuidSubFormat));
