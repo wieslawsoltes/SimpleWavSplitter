@@ -39,7 +39,6 @@ var AssemblyInfoPath = File("./src/Shared/SharedAssemblyInfo.cs");
 var ReleasePlatform = "Any CPU";
 var ReleaseConfiguration = "Release";
 var MSBuildSolution = "./SimpleWavSplitter.sln";
-var XBuildSolution = "./SimpleWavSplitter.sln";
 
 ///////////////////////////////////////////////////////////////////////////////
 // PARAMETERS
@@ -277,18 +276,9 @@ Task("Restore-NuGet-Packages")
                 toolTimeout+=0.5;
             }})
         .Execute(()=> {
-            if(isRunningOnWindows)
-            {
-                NuGetRestore(MSBuildSolution, new NuGetRestoreSettings {
-                    ToolTimeout = TimeSpan.FromMinutes(toolTimeout)
-                });
-            }
-            else
-            {
-                NuGetRestore(XBuildSolution, new NuGetRestoreSettings {
-                    ToolTimeout = TimeSpan.FromMinutes(toolTimeout)
-                });
-            }
+            NuGetRestore(MSBuildSolution, new NuGetRestoreSettings {
+                ToolTimeout = TimeSpan.FromMinutes(toolTimeout)
+            });
         });
 });
 
@@ -296,22 +286,11 @@ Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    if(isRunningOnWindows)
-    {
-        MSBuild(MSBuildSolution, settings => {
-            settings.SetConfiguration(configuration);
-            settings.WithProperty("Platform", "\"" + platform + "\"");
-            settings.SetVerbosity(Verbosity.Minimal);
-        });
-    }
-    else
-    {
-        XBuild(XBuildSolution, settings => {
-            settings.SetConfiguration(configuration);
-            settings.WithProperty("Platform", "\"" + platform + "\"");
-            settings.SetVerbosity(Verbosity.Minimal);
-        });
-    }
+    MSBuild(MSBuildSolution, settings => {
+        settings.SetConfiguration(configuration);
+        settings.WithProperty("Platform", "\"" + platform + "\"");
+        settings.SetVerbosity(Verbosity.Minimal);
+    });
 });
 
 Task("Run-Unit-Tests")
@@ -319,25 +298,16 @@ Task("Run-Unit-Tests")
     .Does(() =>
 {
     string pattern = "./tests/**/bin/" + dirSuffix + "/*.UnitTests.dll";
+    string toolPath = (isPlatformAnyCPU || isPlatformX86) ?
+        "./tools/xunit.runner.console/tools/xunit.console.x86.exe" :
+        "./tools/xunit.runner.console/tools/xunit.console.exe";
 
-    if (isPlatformAnyCPU || isPlatformX86)
-    {
-        XUnit2(pattern, new XUnit2Settings { 
-            ToolPath = "./tools/xunit.runner.console/tools/xunit.console.x86.exe",
-            OutputDirectory = testResultsDir,
-            XmlReportV1 = true,
-            NoAppDomain = true
-        });
-    }
-    else
-    {
-        XUnit2(pattern, new XUnit2Settings { 
-            ToolPath = "./tools/xunit.runner.console/tools/xunit.console.exe",
-            OutputDirectory = testResultsDir,
-            XmlReportV1 = true,
-            NoAppDomain = true
-        });
-    }
+    XUnit2(pattern, new XUnit2Settings { 
+        ToolPath = toolPath,
+        OutputDirectory = testResultsDir,
+        XmlReportV1 = true,
+        NoAppDomain = true
+    });
 });
 
 Task("Zip-Files")
@@ -347,19 +317,24 @@ Task("Zip-Files")
     Zip(zipSourceAvaloniaDirs, 
         zipTargetAvaloniaDirs, 
         GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.dll") + 
-        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.exe"));
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.exe"))
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.config") + 
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.so") + 
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.dylib"));
 
     if (isRunningOnWindows)
     {
         Zip(zipSourceWpfDirs, 
             zipTargetWpfDirs, 
             GetFiles(zipSourceWpfDirs.FullPath + "/*.dll") + 
+            GetFiles(zipSourceWpfDirs.FullPath + "/*.config") + 
             GetFiles(zipSourceWpfDirs.FullPath + "/*.exe"));
     }
 
     Zip(zipSourceConsoleDirs, 
         zipTargetConsoleDirs, 
         GetFiles(zipSourceConsoleDirs.FullPath + "/*.dll") + 
+        GetFiles(zipSourceConsoleDirs.FullPath + "/*.config") + 
         GetFiles(zipSourceConsoleDirs.FullPath + "/*.exe"));
 });
 
