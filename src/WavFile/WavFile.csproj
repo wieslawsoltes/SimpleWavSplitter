@@ -31,4 +31,7 @@
     </Compile>
     <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO" Version="4.3.0" />
+  </ItemGroup>
 </Project>
