@@ -130,8 +130,12 @@ var nuspecNuGetWavFile = new NuGetPackSettings()
     Tags = new [] { "Wav", "Audio", "Splitter", "Multi-channel", "Managed", "C#" },
     Files = new []
     {
-        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/WavFile.dll", Target = "lib/net45" },
-        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/WavFile.xml", Target = "lib/net45" }
+        // netstandard1.1
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/netstandard1.1/" + "/WavFile.dll", Target = "lib/netstandard1.1" },
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/netstandard1.1/" + "/WavFile.xml", Target = "lib/netstandard1.1" },
+        // net45
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/net45/" + "/WavFile.dll", Target = "lib/net45" },
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/net45/" + "/WavFile.xml", Target = "lib/net45" }
     },
     BasePath = Directory("./"),
     OutputDirectory = nugetRoot
