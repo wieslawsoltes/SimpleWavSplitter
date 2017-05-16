@@ -131,11 +131,11 @@ var nuspecNuGetWavFile = new NuGetPackSettings()
     Files = new []
     {
         // netstandard1.3
-        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/netstandard1.3/" + "/WavFile.dll", Target = "lib/netstandard1.3" },
-        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/netstandard1.3/" + "/WavFile.xml", Target = "lib/netstandard1.3" },
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/netstandard1.3/" + "WavFile.dll", Target = "lib/netstandard1.3" },
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/netstandard1.3/" + "WavFile.xml", Target = "lib/netstandard1.3" },
         // net45
-        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/net45/" + "/WavFile.dll", Target = "lib/net45" },
-        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/net45/" + "/WavFile.xml", Target = "lib/net45" }
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/net45/" + "WavFile.dll", Target = "lib/net45" },
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/net45/" + "WavFile.xml", Target = "lib/net45" }
     },
     BasePath = Directory("./"),
     OutputDirectory = nugetRoot
