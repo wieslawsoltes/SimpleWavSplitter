@@ -13,7 +13,7 @@
 Split multi-channel WAV files into single channel WAV files.
 
 * To run program please install .NET Framework Version 4.5
-* To build program use Microsoft Visual C# 2015.
+* To build program use Microsoft Visual C# 2017.
 * Download are available at: https://github.com/wieslawsoltes/SimpleWavSplitter
 
 ### Install
@@ -27,9 +27,9 @@ Split multi-channel WAV files into single channel WAV files.
 
 | Platforn                               | Type        | Version       | Download                                                                                                                                                                  |
 |----------------------------------------|-------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Windows (GUI .NET4.5/WPF)              | Portable    | 0.3.3         | [SimpleWavSplitter.Wpf-Release-0.3.3.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Wpf-Release-0.3.3.zip)             |
-| Windows/Linux/OSX (GUI mono/Avalonia)  | Portable    | 0.3.3         | [SimpleWavSplitter.Avalonia-Release-0.3.3.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Avalonia-Release-0.3.3.zip)   |
-| Windows/Linux/OSX (Console mono/WPF)   | Portable    | 0.3.3         | [SimpleWavSplitter.Console-Release-0.3.3.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Console-Release-0.3.3.zip)     |
+| Windows (GUI .NET4.5/WPF)              | Portable    | 0.3.4         | [SimpleWavSplitter.Wpf-Release-0.3.4.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Wpf-Release-0.3.4.zip)             |
+| Windows/Linux/OSX (GUI mono/Avalonia)  | Portable    | 0.3.4         | [SimpleWavSplitter.Avalonia-Release-0.3.4.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Avalonia-Release-0.3.4.zip)   |
+| Windows/Linux/OSX (Console mono/WPF)   | Portable    | 0.3.4         | [SimpleWavSplitter.Console-Release-0.3.4.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.3/SimpleWavSplitter.Console-Release-0.3.4.zip)     |
 
 ### Mirrors
 
