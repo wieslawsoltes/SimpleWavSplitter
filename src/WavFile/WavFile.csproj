@@ -32,6 +32,6 @@
     <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+    <PackageReference Condition="'$(TargetFramework)' == 'netstandard1.3'" Include="System.IO.FileSystem" Version="4.3.0" />
   </ItemGroup>
 </Project>
