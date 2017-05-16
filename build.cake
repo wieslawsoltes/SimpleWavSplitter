@@ -317,7 +317,7 @@ Task("Zip-Files")
     Zip(zipSourceAvaloniaDirs, 
         zipTargetAvaloniaDirs, 
         GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.dll") + 
-        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.exe"))
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.exe") + 
         GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.config") + 
         GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.so") + 
         GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.dylib"));
