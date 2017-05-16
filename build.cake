@@ -500,6 +500,8 @@ Task("Default")
   .IsDependentOn("Package");
 
 Task("AppVeyor")
+  .IsDependentOn("Run-Unit-Tests-NetCore")
+  .IsDependentOn("Build-NetCore")
   .IsDependentOn("Zip-Files")
   .IsDependentOn("Publish-MyGet")
   .IsDependentOn("Publish-NuGet")
