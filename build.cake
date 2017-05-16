@@ -39,7 +39,6 @@ var AssemblyInfoPath = File("./src/Shared/SharedAssemblyInfo.cs");
 var ReleasePlatform = "Any CPU";
 var ReleaseConfiguration = "Release";
 var MSBuildSolution = "./SimpleWavSplitter.sln";
-var XBuildSolution = "./SimpleWavSplitter.sln";
 
 ///////////////////////////////////////////////////////////////////////////////
 // PARAMETERS
@@ -128,10 +127,19 @@ var nuspecNuGetWavFile = new NuGetPackSettings()
     Description = "Split multi-channel WAV files into single channel WAV files.",
     Copyright = "Copyright 2016",
     Tags = new [] { "Wav", "Audio", "Splitter", "Multi-channel", "Managed", "C#" },
+    Dependencies = new []
+    {
+        // netstandard1.3
+        new NuSpecDependency { Id = "System.IO.FileSystem", TargetFramework = "netstandard1.3", Version = "4.3.0" }
+    },
     Files = new []
     {
-        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/WavFile.dll", Target = "lib/net45" },
-        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/WavFile.xml", Target = "lib/net45" }
+        // netstandard1.3
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/netstandard1.3/" + "WavFile.dll", Target = "lib/netstandard1.3" },
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/netstandard1.3/" + "WavFile.xml", Target = "lib/netstandard1.3" },
+        // net45
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/net45/" + "WavFile.dll", Target = "lib/net45" },
+        new NuSpecContent { Source = "src/WavFile/bin/" + dirSuffix + "/net45/" + "WavFile.xml", Target = "lib/net45" }
     },
     BasePath = Directory("./"),
     OutputDirectory = nugetRoot
@@ -235,7 +243,7 @@ Information("IsMyGetRelease: " + isMyGetRelease);
 Information("IsNuGetRelease: " + isNuGetRelease);
 
 ///////////////////////////////////////////////////////////////////////////////
-// TASKS
+// TASKS: VISUAL STUDIO
 ///////////////////////////////////////////////////////////////////////////////
 
 Task("Clean")
@@ -268,18 +276,9 @@ Task("Restore-NuGet-Packages")
                 toolTimeout+=0.5;
             }})
         .Execute(()=> {
-            if(isRunningOnWindows)
-            {
-                NuGetRestore(MSBuildSolution, new NuGetRestoreSettings {
-                    ToolTimeout = TimeSpan.FromMinutes(toolTimeout)
-                });
-            }
-            else
-            {
-                NuGetRestore(XBuildSolution, new NuGetRestoreSettings {
-                    ToolTimeout = TimeSpan.FromMinutes(toolTimeout)
-                });
-            }
+            NuGetRestore(MSBuildSolution, new NuGetRestoreSettings {
+                ToolTimeout = TimeSpan.FromMinutes(toolTimeout)
+            });
         });
 });
 
@@ -287,22 +286,11 @@ Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    if(isRunningOnWindows)
-    {
-        MSBuild(MSBuildSolution, settings => {
-            settings.SetConfiguration(configuration);
-            settings.WithProperty("Platform", "\"" + platform + "\"");
-            settings.SetVerbosity(Verbosity.Minimal);
-        });
-    }
-    else
-    {
-        XBuild(XBuildSolution, settings => {
-            settings.SetConfiguration(configuration);
-            settings.WithProperty("Platform", "\"" + platform + "\"");
-            settings.SetVerbosity(Verbosity.Minimal);
-        });
-    }
+    MSBuild(MSBuildSolution, settings => {
+        settings.SetConfiguration(configuration);
+        settings.WithProperty("Platform", "\"" + platform + "\"");
+        settings.SetVerbosity(Verbosity.Minimal);
+    });
 });
 
 Task("Run-Unit-Tests")
@@ -310,25 +298,16 @@ Task("Run-Unit-Tests")
     .Does(() =>
 {
     string pattern = "./tests/**/bin/" + dirSuffix + "/*.UnitTests.dll";
+    string toolPath = (isPlatformAnyCPU || isPlatformX86) ?
+        "./tools/xunit.runner.console/tools/xunit.console.x86.exe" :
+        "./tools/xunit.runner.console/tools/xunit.console.exe";
 
-    if (isPlatformAnyCPU || isPlatformX86)
-    {
-        XUnit2(pattern, new XUnit2Settings { 
-            ToolPath = "./tools/xunit.runner.console/tools/xunit.console.x86.exe",
-            OutputDirectory = testResultsDir,
-            XmlReportV1 = true,
-            NoAppDomain = true
-        });
-    }
-    else
-    {
-        XUnit2(pattern, new XUnit2Settings { 
-            ToolPath = "./tools/xunit.runner.console/tools/xunit.console.exe",
-            OutputDirectory = testResultsDir,
-            XmlReportV1 = true,
-            NoAppDomain = true
-        });
-    }
+    XUnit2(pattern, new XUnit2Settings { 
+        ToolPath = toolPath,
+        OutputDirectory = testResultsDir,
+        XmlReportV1 = true,
+        NoAppDomain = true
+    });
 });
 
 Task("Zip-Files")
@@ -338,19 +317,24 @@ Task("Zip-Files")
     Zip(zipSourceAvaloniaDirs, 
         zipTargetAvaloniaDirs, 
         GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.dll") + 
-        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.exe"));
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.exe") + 
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.config") + 
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.so") + 
+        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.dylib"));
 
     if (isRunningOnWindows)
     {
         Zip(zipSourceWpfDirs, 
             zipTargetWpfDirs, 
             GetFiles(zipSourceWpfDirs.FullPath + "/*.dll") + 
+            GetFiles(zipSourceWpfDirs.FullPath + "/*.config") + 
             GetFiles(zipSourceWpfDirs.FullPath + "/*.exe"));
     }
 
     Zip(zipSourceConsoleDirs, 
         zipTargetConsoleDirs, 
         GetFiles(zipSourceConsoleDirs.FullPath + "/*.dll") + 
+        GetFiles(zipSourceConsoleDirs.FullPath + "/*.config") + 
         GetFiles(zipSourceConsoleDirs.FullPath + "/*.exe"));
 });
 
@@ -479,6 +463,31 @@ Task("Publish-Chocolatey")
 });
 
 ///////////////////////////////////////////////////////////////////////////////
+// TASKS: .NET Core
+///////////////////////////////////////////////////////////////////////////////
+
+Task("Restore-NetCore")
+    .IsDependentOn("Clean")
+    .Does(() =>
+{
+    // TODO:
+});
+
+Task("Run-Unit-Tests-NetCore")
+    .IsDependentOn("Clean")
+    .Does(() =>
+{
+    // TODO:
+});
+
+Task("Build-NetCore")
+    .IsDependentOn("Restore-NetCore")
+    .Does(() =>
+{
+    // TODO:
+});
+
+///////////////////////////////////////////////////////////////////////////////
 // TARGETS
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -491,13 +500,16 @@ Task("Default")
   .IsDependentOn("Package");
 
 Task("AppVeyor")
+  .IsDependentOn("Run-Unit-Tests-NetCore")
+  .IsDependentOn("Build-NetCore")
   .IsDependentOn("Zip-Files")
   .IsDependentOn("Publish-MyGet")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-Chocolatey");
 
 Task("Travis")
-  .IsDependentOn("Run-Unit-Tests");
+  .IsDependentOn("Run-Unit-Tests-NetCore")
+  .IsDependentOn("Build-NetCore");
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXECUTE

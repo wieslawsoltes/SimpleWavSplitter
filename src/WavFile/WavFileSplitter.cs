@@ -90,12 +90,9 @@ namespace WavFile
 
             var cleanUp = new Action(() =>
             {
-                fs.Close();
                 fs.Dispose();
-
                 for (int c = 0; c < header.NumChannels; c++)
                 {
-                    outputFiles[c].Close();
                     outputFiles[c].Dispose();
                 }
             });
