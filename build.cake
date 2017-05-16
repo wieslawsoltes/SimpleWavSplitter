@@ -128,6 +128,11 @@ var nuspecNuGetWavFile = new NuGetPackSettings()
     Description = "Split multi-channel WAV files into single channel WAV files.",
     Copyright = "Copyright 2016",
     Tags = new [] { "Wav", "Audio", "Splitter", "Multi-channel", "Managed", "C#" },
+    Dependencies = new []
+    {
+        // netstandard1.3
+        new NuSpecDependency { Id = "System.IO.FileSystem", TargetFramework = "netstandard1.3", Version = "4.3.0" }
+    },
     Files = new []
     {
         // netstandard1.3
