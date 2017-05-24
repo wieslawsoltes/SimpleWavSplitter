@@ -117,8 +117,8 @@ var nuspecNuGetWavFile = new NuGetPackSettings()
 {
     Id = "WavFile",
     Version = version,
-    Authors = new [] { "wieslaw.soltes" },
-    Owners = new [] { "wieslaw.soltes" },
+    Authors = new [] { "wieslawsoltes" },
+    Owners = new [] { "wieslawsoltes" },
     LicenseUrl = new Uri("http://opensource.org/licenses/MIT"),
     ProjectUrl = new Uri("https://github.com/wieslawsoltes/SimpleWavSplitter/"),
     RequireLicenseAcceptance = false,
@@ -159,8 +159,8 @@ var nugetPackages = nuspecNuGetSettings.Select(nuspec => {
 
 var SetChocolateyNuspecCommonProperties = new Action<ChocolateyPackSettings> ((nuspec) => {
     nuspec.Version = version;
-    nuspec.Authors = new [] { "wieslaw.soltes" };
-    nuspec.Owners = new [] { "wieslaw.soltes" };
+    nuspec.Authors = new [] { "wieslawsoltes" };
+    nuspec.Owners = new [] { "wieslawsoltes" };
     nuspec.LicenseUrl = new Uri("http://opensource.org/licenses/MIT");
     nuspec.ProjectUrl = new Uri("https://github.com/wieslawsoltes/SimpleWavSplitter/");
     nuspec.PackageSourceUrl = new Uri("https://github.com/wieslawsoltes/SimpleWavSplitter/");
