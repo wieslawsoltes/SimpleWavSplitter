@@ -7,14 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WavFile;
 
-namespace SimpleWavSplitter
+namespace WavFile
 {
+    /// <summary>
+    /// Split multi-channel WAV files into single channel WAV files.
+    /// </summary>
     public class SimpleWavFileSplitter
     {
         private CancellationTokenSource _tokenSource;
 
+        /// <summary>
+        /// Get WAV file header.
+        /// </summary>
+        /// <param name="fileNames">The file names.</param>
+        /// <param name="setOutput">Set output string action.</param>
         public void GetWavHeader(string[] fileNames, Action<string> setOutput)
         {
             var sb = new StringBuilder();
@@ -47,6 +54,14 @@ namespace SimpleWavSplitter
             setOutput(sb.ToString());
         }
 
+        /// <summary>
+        /// Split WAV files.
+        /// </summary>
+        /// <param name="files">The file names.</param>
+        /// <param name="path">The output path.</param>
+        /// <param name="setProgress">Set progress value action.</param>
+        /// <param name="setOutput">Set output string action.</param>
+        /// <returns></returns>
         public async Task SplitWavFiles(string[] files, string path, Action<double> setProgress, Action<string> setOutput)
         {
             setProgress(0);
@@ -113,6 +128,11 @@ namespace SimpleWavSplitter
             }
         }
 
+        /// <summary>
+        /// Cancel WAV file split.
+        /// </summary>
+        /// <param name="setProgress">Set progress value action.</param>
+        /// <returns>The cancellation task.</returns>
         public async Task CancelSplitWavFiles(Action<double> setProgress)
         {
             if (_tokenSource != null)
