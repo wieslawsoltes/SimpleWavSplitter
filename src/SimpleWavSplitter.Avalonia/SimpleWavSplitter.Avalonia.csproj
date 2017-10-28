@@ -1,54 +1,54 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp2.0</TargetFramework>
-        <RuntimeIdentifiers>win7-x64;ubuntu.14.04-x64;osx.10.12-x64</RuntimeIdentifiers>
-        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-        <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
-        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RuntimeIdentifiers>win7-x64;ubuntu.14.04-x64;osx.10.12-x64</RuntimeIdentifiers>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <Compile Include="**\*.cs" Exclude="obj\**" />
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Include="**\*.cs" Exclude="obj\**" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <Compile Update="**\*.xaml.cs">
-            <DependentUpon>%(Filename)</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <EmbeddedResource Include="**\*.xaml" />
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="**\*.xaml" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <Compile Include="..\Shared\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Shared\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="2.0.0" />
-        <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="2.0.0" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.5.2-build4189-alpha" />
-        <PackageReference Include="Serilog" Version="2.4.0" />
-        <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
-        <PackageReference Include="Splat" Version="2.0.0" />
-        <PackageReference Include="Sprache" Version="2.1.0" />
-        <PackageReference Include="System.ValueTuple" Version="4.3.1" />
-        <PackageReference Include="SkiaSharp" Version="1.57.1" />
-        <PackageReference Include="SharpDX" Version="4.0.1" />
-        <PackageReference Include="SharpDX.Direct2D1" Version="4.0.1" />
-        <PackageReference Include="SharpDX.Direct3D11" Version="4.0.1" />
-        <PackageReference Include="SharpDX.DXGI" Version="4.0.1" />
-        <PackageReference Include="System.Reactive" Version="3.1.1" />
-        <PackageReference Include="System.Reactive.Core" Version="3.1.1" />
-        <PackageReference Include="System.Reactive.Interfaces" Version="3.1.1" />
-        <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
-        <PackageReference Include="System.Reactive.PlatformServices" Version="3.1.1" />
-        <PackageReference Condition="$(TargetFramework.StartsWith('net4'))" Include="System.Reactive.Windows.Threading" Version="3.1.1" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="2.0.0" />
+    <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="2.0.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.5.2-build4189-alpha" />
+    <PackageReference Include="Serilog" Version="2.4.0" />
+    <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
+    <PackageReference Include="Splat" Version="2.0.0" />
+    <PackageReference Include="Sprache" Version="2.1.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
+    <PackageReference Include="SkiaSharp" Version="1.57.1" />
+    <PackageReference Include="SharpDX" Version="4.0.1" />
+    <PackageReference Include="SharpDX.Direct2D1" Version="4.0.1" />
+    <PackageReference Include="SharpDX.Direct3D11" Version="4.0.1" />
+    <PackageReference Include="SharpDX.DXGI" Version="4.0.1" />
+    <PackageReference Include="System.Reactive" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Core" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Interfaces" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.PlatformServices" Version="3.1.1" />
+    <PackageReference Condition="$(TargetFramework.StartsWith('net4'))" Include="System.Reactive.Windows.Threading" Version="3.1.1" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\WavFile\WavFile.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WavFile\WavFile.csproj" />
+  </ItemGroup>
 
 </Project>
