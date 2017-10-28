@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Wpf", "src\SimpleWavSplitter.Wpf\SimpleWavSplitter.Wpf.csproj", "{746BB582-59A3-409A-A9C9-53CCFC287D3F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{76465033-784D-46A6-929B-B4B35E7D422E} = {76465033-784D-46A6-929B-B4B35E7D422E}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WavFile", "src\WavFile\WavFile.csproj", "{76465033-784D-46A6-929B-B4B35E7D422E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WavFile", "src\WavFile\WavFile.csproj", "{76465033-784D-46A6-929B-B4B35E7D422E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Console", "src\SimpleWavSplitter.Console\SimpleWavSplitter.Console.csproj", "{0DB24D15-3920-44C4-83FA-89D0F7565E42}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -32,14 +32,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{2C2B9DE5
 		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Avalonia", "src\SimpleWavSplitter.Avalonia\SimpleWavSplitter.Avalonia.csproj", "{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SimpleWavSplitter.Shared", "src\SimpleWavSplitter.Shared\SimpleWavSplitter.Shared.shproj", "{AE235C3B-7C24-42B2-8AB0-8C415BA591BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWavSplitter.Avalonia", "src\SimpleWavSplitter.Avalonia\SimpleWavSplitter.Avalonia.csproj", "{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\SimpleWavSplitter.Shared\SimpleWavSplitter.Shared.projitems*{746bb582-59a3-409a-a9c9-53ccfc287d3f}*SharedItemsImports = 4
-		src\SimpleWavSplitter.Shared\SimpleWavSplitter.Shared.projitems*{ae235c3b-7c24-42b2-8ab0-8c415ba591be}*SharedItemsImports = 13
 		src\SimpleWavSplitter.Shared\SimpleWavSplitter.Shared.projitems*{ffeca3c3-2785-4aac-b9de-5fa47415444f}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +84,8 @@ Global
 		{76465033-784D-46A6-929B-B4B35E7D422E} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 		{0DB24D15-3920-44C4-83FA-89D0F7565E42} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
-		{AE235C3B-7C24-42B2-8AB0-8C415BA591BE} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3951DE71-3A1A-4A6B-83C1-D58076F2DC76}
 	EndGlobalSection
 EndGlobal
