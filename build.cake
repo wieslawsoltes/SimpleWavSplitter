@@ -89,26 +89,14 @@ if (isRunningOnAppVeyor)
 var artifactsDir = (DirectoryPath)Directory("./artifacts");
 var testResultsDir = artifactsDir.Combine("test-results");
 var nugetRoot = artifactsDir.Combine("nuget");
-var chocolateyRoot = artifactsDir.Combine("chocolatey");
-var zipRoot = artifactsDir.Combine("zip");
 var dirSuffix = isPlatformAnyCPU ? configuration : platform + "/" + configuration;
 var buildDirs = 
-    GetDirectories("./src/**/bin/" + dirSuffix) + 
-    GetDirectories("./src/**/obj/" + dirSuffix) + 
-    GetDirectories("./samples/**/bin/" + dirSuffix) + 
-    GetDirectories("./samples/**/obj/" + dirSuffix) +
-    GetDirectories("./tests/**/bin/" + dirSuffix) + 
-    GetDirectories("./tests/**/obj/" + dirSuffix);
-
-var fileZipSuffix = isPlatformAnyCPU ? configuration + "-" + version + ".zip" : platform + "-" + configuration + "-" + version + ".zip";
-
-var zipSourceAvaloniaDirs = (DirectoryPath)Directory("./src/SimpleWavSplitter.Avalonia/bin/" + dirSuffix);
-var zipSourceWpfDirs = (DirectoryPath)Directory("./src/SimpleWavSplitter.Wpf/bin/" + dirSuffix);
-var zipSourceConsoleDirs = (DirectoryPath)Directory("./src/SimpleWavSplitter.Console/bin/" + dirSuffix);
-
-var zipTargetAvaloniaDirs = zipRoot.CombineWithFilePath("SimpleWavSplitter.Avalonia-" + fileZipSuffix);
-var zipTargetWpfDirs = zipRoot.CombineWithFilePath("SimpleWavSplitter.Wpf-" + fileZipSuffix);
-var zipTargetConsoleDirs = zipRoot.CombineWithFilePath("SimpleWavSplitter.Console-" + fileZipSuffix);
+    GetDirectories("./src/**/bin/**") + 
+    GetDirectories("./src/**/obj/**") + 
+    GetDirectories("./samples/**/bin/**") + 
+    GetDirectories("./samples/**/obj/**") + 
+    GetDirectories("./tests/**/bin/**") + 
+    GetDirectories("./tests/**/obj/**");
 
 ///////////////////////////////////////////////////////////////////////////////
 // NUGET NUSPECS
@@ -155,63 +143,6 @@ var nugetPackages = nuspecNuGetSettings.Select(nuspec => {
 }).ToArray();
 
 ///////////////////////////////////////////////////////////////////////////////
-// CHOCOLATEY NUSPECS
-///////////////////////////////////////////////////////////////////////////////
-
-var SetChocolateyNuspecCommonProperties = new Action<ChocolateyPackSettings> ((nuspec) => {
-    nuspec.Version = version;
-    nuspec.Authors = new [] { "wieslawsoltes" };
-    nuspec.Owners = new [] { "wieslawsoltes" };
-    nuspec.LicenseUrl = new Uri("http://opensource.org/licenses/MIT");
-    nuspec.ProjectUrl = new Uri("https://github.com/wieslawsoltes/SimpleWavSplitter/");
-    nuspec.PackageSourceUrl = new Uri("https://github.com/wieslawsoltes/SimpleWavSplitter/");
-    nuspec.ProjectSourceUrl = new Uri("https://github.com/wieslawsoltes/SimpleWavSplitter/");
-    nuspec.BugTrackerUrl = new Uri("https://github.com/wieslawsoltes/SimpleWavSplitter/issues/");
-    nuspec.DocsUrl = new Uri("http://wieslawsoltes.github.io/SimpleWavSplitter/");
-    nuspec.RequireLicenseAcceptance = false;
-    nuspec.Description = "Split multi-channel WAV files into single channel WAV files.";
-    nuspec.Copyright = "Copyright 2016";
-    nuspec.Tags = new [] { "Wav", "Audio", "Splitter", "Multi-channel", "Managed", "C#" };
-});
-
-Func<DirectoryPath, ChocolateyNuSpecContent[]> GetChocolateyNuSpecContent = path => {
-    var files = GetFiles(path.FullPath + "/*.dll") + GetFiles(path.FullPath + "/*.exe");
-    return files.Select(file => new ChocolateyNuSpecContent { Source = file.FullPath, Target = "bin" }).ToArray();
-};
-
-var nuspecChocolateySettings = new Dictionary<ChocolateyPackSettings, DirectoryPath>();
-
-///////////////////////////////////////////////////////////////////////////////
-// src: SimpleWavSplitter.Avalonia
-///////////////////////////////////////////////////////////////////////////////
-nuspecChocolateySettings.Add(
-    new ChocolateyPackSettings
-    {
-        Id = "SimpleWavSplitter-Avalonia",
-        Title = "SimpleWavSplitter (Avalonia)",
-        OutputDirectory = chocolateyRoot
-    },
-    zipSourceAvaloniaDirs);
-
-///////////////////////////////////////////////////////////////////////////////
-// src: SimpleWavSplitter.Wpf
-///////////////////////////////////////////////////////////////////////////////
-nuspecChocolateySettings.Add(
-    new ChocolateyPackSettings
-    {
-        Id = "SimpleWavSplitter-Wpf",
-        Title = "SimpleWavSplitter (WPF)",
-        OutputDirectory = chocolateyRoot
-    },
-    zipSourceWpfDirs);
-
-nuspecChocolateySettings.ToList().ForEach((nuspec) => SetChocolateyNuspecCommonProperties(nuspec.Key));
-
-var chocolateyPackages = nuspecChocolateySettings.Select(nuspec => {
-    return nuspec.Key.OutputDirectory.CombineWithFilePath(string.Concat(nuspec.Key.Id, ".", nuspec.Key.Version, ".nupkg"));
-}).ToArray();
-
-///////////////////////////////////////////////////////////////////////////////
 // INFORMATION
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -254,8 +185,6 @@ Task("Clean")
     CleanDirectory(artifactsDir);
     CleanDirectory(testResultsDir);
     CleanDirectory(nugetRoot);
-    CleanDirectory(chocolateyRoot);
-    CleanDirectory(zipRoot);
 });
 
 Task("Restore-NuGet-Packages")
@@ -309,34 +238,6 @@ Task("Run-Unit-Tests")
     });
 });
 
-Task("Zip-Files")
-    .IsDependentOn("Run-Unit-Tests")
-    .Does(() =>
-{
-    Zip(zipSourceAvaloniaDirs, 
-        zipTargetAvaloniaDirs, 
-        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.dll") + 
-        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.exe") + 
-        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.config") + 
-        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.so") + 
-        GetFiles(zipSourceAvaloniaDirs.FullPath + "/*.dylib"));
-
-    if (isRunningOnWindows)
-    {
-        Zip(zipSourceWpfDirs, 
-            zipTargetWpfDirs, 
-            GetFiles(zipSourceWpfDirs.FullPath + "/*.dll") + 
-            GetFiles(zipSourceWpfDirs.FullPath + "/*.config") + 
-            GetFiles(zipSourceWpfDirs.FullPath + "/*.exe"));
-    }
-
-    Zip(zipSourceConsoleDirs, 
-        zipTargetConsoleDirs, 
-        GetFiles(zipSourceConsoleDirs.FullPath + "/*.dll") + 
-        GetFiles(zipSourceConsoleDirs.FullPath + "/*.config") + 
-        GetFiles(zipSourceConsoleDirs.FullPath + "/*.exe"));
-});
-
 Task("Create-NuGet-Packages")
     .IsDependentOn("Run-Unit-Tests")
     .Does(() =>
@@ -344,18 +245,6 @@ Task("Create-NuGet-Packages")
     foreach(var nuspec in nuspecNuGetSettings)
     {
         NuGetPack(nuspec);
-    }
-});
-
-Task("Create-Chocolatey-Packages")
-    .IsDependentOn("Run-Unit-Tests")
-    .WithCriteria(() => isRunningOnWindows)
-    .Does(() =>
-{
-    foreach(var nuspec in nuspecChocolateySettings)
-    {
-        nuspec.Key.Files = GetChocolateyNuSpecContent(nuspec.Value);
-        ChocolateyPack(nuspec.Key);
     }
 });
 
@@ -427,40 +316,6 @@ Task("Publish-NuGet")
     Information("Publish-NuGet Task failed, but continuing with next Task...");
 });
 
-Task("Publish-Chocolatey")
-    .IsDependentOn("Create-Chocolatey-Packages")
-    .WithCriteria(() => !isLocalBuild)
-    .WithCriteria(() => !isPullRequest)
-    .WithCriteria(() => isMainRepo)
-    .WithCriteria(() => isMasterBranch)
-    .WithCriteria(() => isNuGetRelease)
-    .Does(() =>
-{
-    var apiKey = EnvironmentVariable("CHOCOLATEY_API_KEY");
-    if(string.IsNullOrEmpty(apiKey)) 
-    {
-        throw new InvalidOperationException("Could not resolve Chocolatey API key.");
-    }
-
-    var apiUrl = EnvironmentVariable("CHOCOLATEY_API_URL");
-    if(string.IsNullOrEmpty(apiUrl)) 
-    {
-        throw new InvalidOperationException("Could not resolve Chocolatey API url.");
-    }
-
-    foreach(var nupkg in chocolateyPackages)
-    {
-        ChocolateyPush(nupkg, new ChocolateyPushSettings {
-            ApiKey = apiKey,
-            Source = apiUrl
-        });
-    }
-})
-.OnError(exception =>
-{
-    Information("Publish-Chocolatey Task failed, but continuing with next Task...");
-});
-
 ///////////////////////////////////////////////////////////////////////////////
 // TASKS: .NET Core
 ///////////////////////////////////////////////////////////////////////////////
@@ -491,9 +346,7 @@ Task("Build-NetCore")
 ///////////////////////////////////////////////////////////////////////////////
 
 Task("Package")
-  .IsDependentOn("Zip-Files")
-  .IsDependentOn("Create-NuGet-Packages")
-  .IsDependentOn("Create-Chocolatey-Packages");
+  .IsDependentOn("Create-NuGet-Packages");
 
 Task("Default")
   .IsDependentOn("Package");
@@ -501,10 +354,8 @@ Task("Default")
 Task("AppVeyor")
   .IsDependentOn("Run-Unit-Tests-NetCore")
   .IsDependentOn("Build-NetCore")
-  .IsDependentOn("Zip-Files")
   .IsDependentOn("Publish-MyGet")
-  .IsDependentOn("Publish-NuGet")
-  .IsDependentOn("Publish-Chocolatey");
+  .IsDependentOn("Publish-NuGet");
 
 Task("Travis")
   .IsDependentOn("Run-Unit-Tests-NetCore")
