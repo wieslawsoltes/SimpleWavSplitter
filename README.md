@@ -4,6 +4,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/pfooqgyo9uwrj44o/branch/master?svg=true)](https://ci.appveyor.com/project/wieslawsoltes/simplewavsplitter/branch/master)
 [![Build Status](https://travis-ci.org/wieslawsoltes/SimpleWavSplitter.svg?branch=master)](https://travis-ci.org/wieslawsoltes/SimpleWavSplitter)
+[![CircleCI](https://circleci.com/gh/wieslawsoltes/SimpleWavSplitter/tree/master.svg?style=svg)](https://circleci.com/gh/wieslawsoltes/SimpleWavSplitter/tree/master)
 
 [![NuGet](https://img.shields.io/nuget/v/WavFile.svg)](https://www.nuget.org/packages/WavFile)
 [![MyGet](https://img.shields.io/myget/simplewavsplitter-nightly/vpre/WavFile.svg?label=myget)](https://www.myget.org/gallery/simplewavsplitter-nightly) 
