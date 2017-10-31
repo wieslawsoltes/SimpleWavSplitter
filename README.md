@@ -16,13 +16,6 @@ Split multi-channel WAV files into single channel WAV files.
 * To build program use Microsoft Visual C# 2017.
 * Download are available at: https://github.com/wieslawsoltes/SimpleWavSplitter
 
-### Install
-
-| Package                     | Latest release                                                                                                                                    | Pre-release                                                                                                                                          |
-|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SimpleWavSplitter-Avalonia  | [![Chocolatey](https://img.shields.io/chocolatey/v/SimpleWavSplitter-Avalonia.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Avalonia)   | [![Chocolatey](https://img.shields.io/chocolatey/vpre/SimpleWavSplitter-Avalonia.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Avalonia)   |
-| SimpleWavSplitter-Wpf       | [![Chocolatey](https://img.shields.io/chocolatey/v/SimpleWavSplitter-Wpf.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Wpf)             | [![Chocolatey](https://img.shields.io/chocolatey/vpre/SimpleWavSplitter-Wpf.svg)](https://chocolatey.org/packages/SimpleWavSplitter-Wpf)             |
-
 ### Download
 
 | Platforn                               | Type        | Version       | Download                                                                                                                                                                  |
@@ -62,7 +55,7 @@ Does not require any external dependencies.
 
 ## Using SimpleWavSplitter
 
-Please check first the sample apps and the [helper class](https://github.com/wieslawsoltes/SimpleWavSplitter/blob/master/src/SimpleWavSplitter.Shared/SimpleWavFileSplitter.cs).
+Please check first the sample apps and the [helper class](https://github.com/wieslawsoltes/SimpleWavSplitter/blob/master/src/WavFile/SimpleWavFileSplitter.cs).
 * SimpleWavSplitter.Console
 * SimpleWavSplitter.Wpf
 * SimpleWavSplitter.Avalonia
