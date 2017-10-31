@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Console",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Wpf", "src\SimpleWavSplitter.Wpf\SimpleWavSplitter.Wpf.csproj", "{746BB582-59A3-409A-A9C9-53CCFC287D3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWavSplitter.Avalonia", "src\SimpleWavSplitter.Avalonia\SimpleWavSplitter.Avalonia.csproj", "{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Avalonia", "src\SimpleWavSplitter.Avalonia\SimpleWavSplitter.Avalonia.csproj", "{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}"
 EndProject
@@ -58,6 +58,14 @@ Global
 		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|Mono.ActiveCfg = Release|Any CPU
 		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|Mono.Build.0 = Release|Any CPU
+		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Debug|Mono.ActiveCfg = Debug|Any CPU
+		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Debug|Mono.Build.0 = Debug|Any CPU
+		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Release|Mono.ActiveCfg = Release|Any CPU
+		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Release|Mono.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +74,6 @@ Global
 		{746BB582-59A3-409A-A9C9-53CCFC287D3F} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 		{76465033-784D-46A6-929B-B4B35E7D422E} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 		{0DB24D15-3920-44C4-83FA-89D0F7565E42} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
+		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 	EndGlobalSection
 EndGlobal
