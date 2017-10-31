@@ -17,7 +17,7 @@ build_script:
 test: off
 notifications:
 - provider: Webhook
-  url: https://webhooks.gitter.im/e/3211907a32bb8b42a441
+  url: https://webhooks.gitter.im/e/d9a05a0b1fcbe768bbcd
   method: POST
   on_build_success: true
   on_build_failure: true
