@@ -299,12 +299,10 @@ Task("Run-Unit-Tests")
     .Does(() =>
 {
     string pattern = "./tests/**/bin/" + dirSuffix + "/*.UnitTests.dll";
-    string toolPath = (isPlatformAnyCPU || isPlatformX86) ? 
-        Context.Tools.Resolve("xunit.console.x86.exe") :
-        Context.Tools.Resolve("xunit.console.exe");
-
     XUnit2(pattern, new XUnit2Settings { 
-        ToolPath = toolPath,
+        ToolPath = (isPlatformAnyCPU || isPlatformX86) ? 
+            Context.Tools.Resolve("xunit.console.x86.exe") :
+            Context.Tools.Resolve("xunit.console.exe"),
         OutputDirectory = testResultsDir,
         XmlReportV1 = true,
         NoAppDomain = true
