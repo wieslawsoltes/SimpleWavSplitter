@@ -299,9 +299,9 @@ Task("Run-Unit-Tests")
     .Does(() =>
 {
     string pattern = "./tests/**/bin/" + dirSuffix + "/*.UnitTests.dll";
-    string toolPath = (isPlatformAnyCPU || isPlatformX86) ?
-        "./tools/xunit.runner.console/tools/xunit.console.x86.exe" :
-        "./tools/xunit.runner.console/tools/xunit.console.exe";
+    string toolPath = (isPlatformAnyCPU || isPlatformX86) ? 
+        Context.Tools.Resolve("xunit.console.x86.exe") :
+        Context.Tools.Resolve("xunit.console.exe");
 
     XUnit2(pattern, new XUnit2Settings { 
         ToolPath = toolPath,
