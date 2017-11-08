@@ -40,6 +40,40 @@ var AssemblyInfoPath = File("./src/Shared/SharedAssemblyInfo.cs");
 var ReleasePlatform = "Any CPU";
 var ReleaseConfiguration = "Release";
 var MSBuildSolution = "./SimpleWavSplitter.sln";
+var UnitTestsFramework = "net461";
+
+///////////////////////////////////////////////////////////////////////////////
+// .NET Core Projects
+///////////////////////////////////////////////////////////////////////////////
+
+var netCoreAppsRoot= "./src";
+var netCoreApps = new string[] { "SimpleWavSplitter.Avalonia" };
+var netCoreProjects = netCoreApps.Select(name => 
+    new {
+        Path = string.Format("{0}/{1}", netCoreAppsRoot, name),
+        Name = name,
+        Framework = XmlPeek(string.Format("{0}/{1}/{1}.csproj", netCoreAppsRoot, name), "//*[local-name()='TargetFramework']/text()"),
+        Runtimes = XmlPeek(string.Format("{0}/{1}/{1}.csproj", netCoreAppsRoot, name), "//*[local-name()='RuntimeIdentifiers']/text()").Split(';')
+    }).ToList();
+
+///////////////////////////////////////////////////////////////////////////////
+// .NET Core UnitTests
+///////////////////////////////////////////////////////////////////////////////
+
+var netCoreUnitTestsRoot= "./tests";
+var netCoreUnitTests = new string[] { 
+};
+var netCoreUnitTestsProjects = netCoreUnitTests.Select(name => 
+    new {
+        Name = name,
+        Path = string.Format("{0}/{1}", netCoreUnitTestsRoot, name),
+        File = string.Format("{0}/{1}/{1}.csproj", netCoreUnitTestsRoot, name)
+    }).ToList();
+var netCoreUnitTestsFrameworks = new List<string>() { "netcoreapp2.0" };
+if (IsRunningOnWindows())
+{
+    netCoreUnitTestsFrameworks.Add("net461");
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // PARAMETERS
@@ -220,6 +254,7 @@ Task("Build")
         settings.SetConfiguration(configuration);
         settings.WithProperty("Platform", "\"" + platform + "\"");
         settings.SetVerbosity(Verbosity.Minimal);
+        settings.SetMaxCpuCount(0);
     });
 });
 
@@ -227,15 +262,23 @@ Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    string pattern = "./tests/**/bin/" + dirSuffix + "/*.UnitTests.dll";
-    XUnit2(pattern, new XUnit2Settings { 
+    if(!isRunningOnWindows)
+       return;
+    var assemblies = GetFiles("./tests/**/bin/" + dirSuffix + "/" + UnitTestsFramework + "/*.UnitTests.dll");
+    var settings = new XUnit2Settings { 
         ToolPath = (isPlatformAnyCPU || isPlatformX86) ? 
             Context.Tools.Resolve("xunit.console.x86.exe") :
             Context.Tools.Resolve("xunit.console.exe"),
         OutputDirectory = testResultsDir,
         XmlReportV1 = true,
-        NoAppDomain = true
-    });
+        NoAppDomain = true,
+        Parallelism = ParallelismOption.None,
+        ShadowCopy = false
+    };
+    foreach (var assembly in assemblies)
+    {
+        XUnit2(assembly.FullPath, settings);
+    }
 });
 
 Task("Create-NuGet-Packages")
@@ -324,21 +367,44 @@ Task("Restore-NetCore")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    // TODO:
+    foreach (var project in netCoreProjects)
+    {
+        DotNetCoreRestore(project.Path);
+    }
 });
 
 Task("Run-Unit-Tests-NetCore")
     .IsDependentOn("Clean")
-    .Does(() =>
+    .Does(() => 
 {
-    // TODO:
+    foreach (var project in netCoreUnitTestsProjects)
+    {
+        DotNetCoreRestore(project.Path);
+        foreach(var framework in netCoreUnitTestsFrameworks)
+        {
+            Information("Running tests for: {0}, framework: {1}", project.Name, framework);
+            DotNetCoreTest(project.File, new DotNetCoreTestSettings {
+                Configuration = configuration,
+                Framework = framework
+            });
+        }
+    }
 });
 
 Task("Build-NetCore")
     .IsDependentOn("Restore-NetCore")
-    .Does(() =>
+    .Does(() => 
 {
-    // TODO:
+    foreach (var project in netCoreProjects)
+    {
+        Information("Building: {0}", project.Name);
+        DotNetCoreBuild(project.Path, new DotNetCoreBuildSettings {
+            Configuration = configuration,
+            MSBuildSettings = new DotNetCoreMSBuildSettings() {
+                MaxCpuCount = 0
+            }
+        });
+    }
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -349,7 +415,7 @@ Task("Package")
   .IsDependentOn("Create-NuGet-Packages");
 
 Task("Default")
-  .IsDependentOn("Package");
+  .IsDependentOn("Run-Unit-Tests");
 
 Task("AppVeyor")
   .IsDependentOn("Run-Unit-Tests-NetCore")
