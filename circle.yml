@@ -9,8 +9,7 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
     steps:
       - checkout
-      - run: dotnet restore src/WavFile
-      - run: dotnet build src/WavFile/WavFile.csproj -c Release -f netstandard1.3
+      - run: ./build.sh --target "Travis" --platform "Mono" --configuration "Release"
     notify:
       webhooks:
         - url: https://webhooks.gitter.im/e/d9a05a0b1fcbe768bbcd
