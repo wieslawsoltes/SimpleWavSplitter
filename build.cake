@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #addin "nuget:?package=Polly&version=5.3.1"
-#addin "nuget:?package=NuGet.Core&version=2.14.0"
+#addin "nuget:?package=PackageReferenceEditor&version=0.0.3"
 
 ///////////////////////////////////////////////////////////////////////////////
 // TOOLS
@@ -19,8 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PackageReferenceEditor;
 using Polly;
-using NuGet;
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -136,6 +136,16 @@ var buildDirs =
 // NUGET NUSPECS
 ///////////////////////////////////////////////////////////////////////////////
 
+var result = Updater.FindReferences("./build", "*.props", new string[] { });	
+
+result.ValidateVersions();
+
+Information("Setting NuGet package dependencies versions:");
+
+var SystemIOFileSystem = result.GroupedReferences["System.IO.FileSystem"].FirstOrDefault().Version;
+
+Information("Package: System.IO.FileSystem, version: {0}", SystemIOFileSystem);
+
 var nuspecNuGetWavFile = new NuGetPackSettings()
 {
     Id = "WavFile",
@@ -153,7 +163,7 @@ var nuspecNuGetWavFile = new NuGetPackSettings()
     Dependencies = new []
     {
         // netstandard1.3
-        new NuSpecDependency { Id = "System.IO.FileSystem", TargetFramework = "netstandard1.3", Version = "4.3.0" }
+        new NuSpecDependency { Id = "System.IO.FileSystem", TargetFramework = "netstandard1.3", Version = SystemIOFileSystem }
     },
     Files = new []
     {
