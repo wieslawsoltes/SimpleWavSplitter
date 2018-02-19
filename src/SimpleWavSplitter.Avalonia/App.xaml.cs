@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Diagnostics;
 using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
-using Serilog;
 
 namespace SimpleWavSplitter.Avalonia
 {
@@ -22,15 +21,21 @@ namespace SimpleWavSplitter.Avalonia
         }
 
         /// <summary>
+        /// Build Avalonia app.
+        /// </summary>
+        /// <returns>The Avalonia app builder.</returns>
+        public static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+                         .UsePlatformDetect()
+                         .LogToDebug();
+
+        /// <summary>
         /// Program entry point.
         /// </summary>
         /// <param name="args">The program arguments.</param>
         static void Main(string[] args)
         {
-            InitializeLogging();
-            AppBuilder.Configure<App>()
-                .UsePlatformDetect()
-                .Start<MainWindow>();
+            BuildAvaloniaApp().Start<MainWindow>();
         }
 
         /// <summary>
@@ -41,19 +46,6 @@ namespace SimpleWavSplitter.Avalonia
         {
 #if DEBUG
             DevTools.Attach(window);
-#endif
-        }
-
-        /// <summary>
-        /// Initializes logging in debug mode.
-        /// </summary>
-        private static void InitializeLogging()
-        {
-#if DEBUG
-            SerilogLogger.Initialize(new LoggerConfiguration()
-                .MinimumLevel.Warning()
-                .WriteTo.Trace(outputTemplate: "{Area}: {Message}")
-                .CreateLogger());
 #endif
         }
     }
