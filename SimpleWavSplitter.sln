@@ -5,11 +5,11 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WavFile", "src\WavFile\WavFile.csproj", "{76465033-784D-46A6-929B-B4B35E7D422E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Console", "src\SimpleWavSplitter.Console\SimpleWavSplitter.Console.csproj", "{0DB24D15-3920-44C4-83FA-89D0F7565E42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWavSplitter.Console", "src\SimpleWavSplitter.Console\SimpleWavSplitter.Console.csproj", "{0DB24D15-3920-44C4-83FA-89D0F7565E42}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Wpf", "src\SimpleWavSplitter.Wpf\SimpleWavSplitter.Wpf.csproj", "{746BB582-59A3-409A-A9C9-53CCFC287D3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Avalonia", "src\SimpleWavSplitter.Avalonia\SimpleWavSplitter.Avalonia.csproj", "{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWavSplitter.Avalonia", "src\SimpleWavSplitter.Avalonia\SimpleWavSplitter.Avalonia.csproj", "{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}"
 EndProject
@@ -20,12 +20,44 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{D848C9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{2C2B9DE5-D2CC-4464-8660-2D2F5590C396}"
 	ProjectSection(SolutionItems) = preProject
-		.travis.yml = .travis.yml
-		appveyor.yml = appveyor.yml
+		.editorconfig = .editorconfig
 		build.cake = build.cake
-		build.ps1 = build.ps1
-		build.sh = build.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{6B224FC9-092D-4400-BD18-7CEBED0888D6}"
+	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
+		_config.yml = _config.yml
+		appveyor.yml = appveyor.yml
+		azure-pipelines.yml = azure-pipelines.yml
+		circle.yml = circle.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{993E4853-EF1E-4D37-8015-BEC79278A997}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{20652AD5-435B-4968-849C-67FE00090BB9}"
+	ProjectSection(SolutionItems) = preProject
 		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{335EB7D0-D585-4FC2-BDC9-451EA7780FF1}"
+	ProjectSection(SolutionItems) = preProject
+		build\Avalonia.Desktop.props = build\Avalonia.Desktop.props
+		build\Avalonia.props = build\Avalonia.props
+		build\NETCore.props = build\NETCore.props
+		build\Rx.props = build\Rx.props
+		build\System.IO.FileSystem.props = build\System.IO.FileSystem.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{305D7F58-9B4A-4841-9EF1-BB279EF56995}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.TXT = LICENSE.TXT
+		README.md = README.md
+		Reference.txt = Reference.txt
 	EndProjectSection
 EndProject
 Global
@@ -36,12 +68,6 @@ Global
 		Release|Mono = Release|Mono
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Debug|Mono.ActiveCfg = Debug|Any CPU
-		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Release|Mono.ActiveCfg = Release|Any CPU
 		{76465033-784D-46A6-929B-B4B35E7D422E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{76465033-784D-46A6-929B-B4B35E7D422E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76465033-784D-46A6-929B-B4B35E7D422E}.Debug|Mono.ActiveCfg = Debug|Any CPU
@@ -58,6 +84,12 @@ Global
 		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|Mono.ActiveCfg = Release|Any CPU
 		{0DB24D15-3920-44C4-83FA-89D0F7565E42}.Release|Mono.Build.0 = Release|Any CPU
+		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Debug|Mono.ActiveCfg = Debug|Any CPU
+		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{746BB582-59A3-409A-A9C9-53CCFC287D3F}.Release|Mono.ActiveCfg = Release|Any CPU
 		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Debug|Mono.ActiveCfg = Debug|Any CPU
@@ -71,9 +103,17 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{746BB582-59A3-409A-A9C9-53CCFC287D3F} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 		{76465033-784D-46A6-929B-B4B35E7D422E} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 		{0DB24D15-3920-44C4-83FA-89D0F7565E42} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
+		{746BB582-59A3-409A-A9C9-53CCFC287D3F} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
+		{6B224FC9-092D-4400-BD18-7CEBED0888D6} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
+		{993E4853-EF1E-4D37-8015-BEC79278A997} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
+		{20652AD5-435B-4968-849C-67FE00090BB9} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
+		{335EB7D0-D585-4FC2-BDC9-451EA7780FF1} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
+		{305D7F58-9B4A-4841-9EF1-BB279EF56995} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4194A594-1463-4823-8A28-CBBE8B416F46}
 	EndGlobalSection
 EndGlobal
