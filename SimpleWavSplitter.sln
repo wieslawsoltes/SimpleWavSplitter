@@ -26,11 +26,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{2C2B9DE5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{6B224FC9-092D-4400-BD18-7CEBED0888D6}"
 	ProjectSection(SolutionItems) = preProject
-		.travis.yml = .travis.yml
 		_config.yml = _config.yml
 		appveyor.yml = appveyor.yml
 		azure-pipelines.yml = azure-pipelines.yml
-		circle.yml = circle.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{993E4853-EF1E-4D37-8015-BEC79278A997}"
