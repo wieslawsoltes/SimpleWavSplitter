@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28315.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WavFile", "src\WavFile\WavFile.csproj", "{76465033-784D-46A6-929B-B4B35E7D422E}"
 EndProject
@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{2C2B9DE5
 		.nuke = .nuke
 		build.ps1 = build.ps1
 		build.sh = build.sh
+		global.json = global.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{993E4853-EF1E-4D37-8015-BEC79278A997}"
@@ -38,6 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{335EB7D0
 		build\EmbedXaml.props = build\EmbedXaml.props
 		build\Rx.props = build\Rx.props
 		build\System.IO.FileSystem.props = build\System.IO.FileSystem.props
+		build\XUnit.props = build\XUnit.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{305D7F58-9B4A-4841-9EF1-BB279EF56995}"
@@ -46,6 +48,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{305D7F58-9
 		README.md = README.md
 		Reference.txt = Reference.txt
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\build\_build.csproj", "{E25E3DD5-6313-4DDC-90F0-587657EF0950}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1ACCC200-FC4E-4E77-ADC8-547C39CDD0D7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WavFile.UnitTests", "tests\WavFile.UnitTests\WavFile.UnitTests.csproj", "{D0092F14-0394-41B7-A9A2-A3C3E51C02A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +73,14 @@ Global
 		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E25E3DD5-6313-4DDC-90F0-587657EF0950}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E25E3DD5-6313-4DDC-90F0-587657EF0950}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E25E3DD5-6313-4DDC-90F0-587657EF0950}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E25E3DD5-6313-4DDC-90F0-587657EF0950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0092F14-0394-41B7-A9A2-A3C3E51C02A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0092F14-0394-41B7-A9A2-A3C3E51C02A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0092F14-0394-41B7-A9A2-A3C3E51C02A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0092F14-0394-41B7-A9A2-A3C3E51C02A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,7 +92,8 @@ Global
 		{993E4853-EF1E-4D37-8015-BEC79278A997} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
 		{20652AD5-435B-4968-849C-67FE00090BB9} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
 		{335EB7D0-D585-4FC2-BDC9-451EA7780FF1} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
-		{305D7F58-9B4A-4841-9EF1-BB279EF56995} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
+		{E25E3DD5-6313-4DDC-90F0-587657EF0950} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
+		{D0092F14-0394-41B7-A9A2-A3C3E51C02A5} = {1ACCC200-FC4E-4E77-ADC8-547C39CDD0D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4194A594-1463-4823-8A28-CBBE8B416F46}
