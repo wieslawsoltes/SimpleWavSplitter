@@ -2,15 +2,13 @@
 
 [![Gitter](https://badges.gitter.im/wieslawsoltes/SimpleWavSplitter.svg)](https://gitter.im/wieslawsoltes/SimpleWavSplitter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/pfooqgyo9uwrj44o/branch/master?svg=true)](https://ci.appveyor.com/project/wieslawsoltes/simplewavsplitter/branch/master)
-[![Build Status](https://dev.azure.com/wieslawsoltes/SimpleWavSplitter/_apis/build/status/wieslawsoltes.SimpleWavSplitter)](https://dev.azure.com/wieslawsoltes/SimpleWavSplitter/_build/latest?definitionId=1)
+[![Build status](https://dev.azure.com/wieslawsoltes/SimpleWavSplitter/_apis/build/status/SimpleWavSplitter)](https://dev.azure.com/wieslawsoltes/SimpleWavSplitter/_build/latest?definitionId=-1)
 
 [![NuGet](https://img.shields.io/nuget/v/WavFile.svg)](https://www.nuget.org/packages/WavFile)
 [![MyGet](https://img.shields.io/myget/simplewavsplitter-nightly/vpre/WavFile.svg?label=myget)](https://www.myget.org/gallery/simplewavsplitter-nightly) 
 
 Split multi-channel WAV files into single channel WAV files.
 
-* To run program please install .NET Framework Version 4.5
 * To build program use Microsoft Visual C# 2017.
 * Download are available at: https://github.com/wieslawsoltes/SimpleWavSplitter
 
@@ -18,9 +16,8 @@ Split multi-channel WAV files into single channel WAV files.
 
 | Platforn                               | Type        | Version       | Download                                                                                                                                                                  |
 |----------------------------------------|-------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Windows (GUI .NET4.5/WPF)              | Portable    | 0.3.4         | [SimpleWavSplitter.Wpf-Release-0.3.4.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.4/SimpleWavSplitter.Wpf-Release-0.3.4.zip)             |
-| Windows/Linux/OSX (GUI mono/Avalonia)  | Portable    | 0.3.4         | [SimpleWavSplitter.Avalonia-Release-0.3.4.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.4/SimpleWavSplitter.Avalonia-Release-0.3.4.zip)   |
-| Windows/Linux/OSX (Console mono/WPF)   | Portable    | 0.3.4         | [SimpleWavSplitter.Console-Release-0.3.4.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.4/SimpleWavSplitter.Console-Release-0.3.4.zip)     |
+| Windows/Linux/OSX (GUI)                | Portable    | 0.3.4         | [SimpleWavSplitter.Avalonia-Release-0.3.4.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.4/SimpleWavSplitter.Avalonia-Release-0.3.4.zip)   |
+| Windows/Linux/OSX (Console)            | Portable    | 0.3.4         | [SimpleWavSplitter.Console-Release-0.3.4.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.4/SimpleWavSplitter.Console-Release-0.3.4.zip)     |
 
 ### Mirrors
 
@@ -55,7 +52,6 @@ Does not require any external dependencies.
 
 Please check first the sample apps and the [helper class](https://github.com/wieslawsoltes/SimpleWavSplitter/blob/master/src/WavFile/SimpleWavFileSplitter.cs).
 * SimpleWavSplitter.Console
-* SimpleWavSplitter.Wpf
 * SimpleWavSplitter.Avalonia
 
 ### Split Wav Files
