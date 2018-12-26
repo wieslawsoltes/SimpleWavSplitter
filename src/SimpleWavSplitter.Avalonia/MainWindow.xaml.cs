@@ -66,7 +66,7 @@ namespace SimpleWavSplitter.Avalonia
                 dlg.InitialDirectory = textOutputPath.Text;
             }
 
-            var result = await dlg.ShowAsync();
+            var result = await dlg.ShowAsync(this);
             if (!string.IsNullOrWhiteSpace(result))
             {
                 textOutputPath.Text = result;
@@ -80,7 +80,7 @@ namespace SimpleWavSplitter.Avalonia
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.AllowMultiple = true;
 
-            var result = await dlg.ShowAsync();
+            var result = await dlg.ShowAsync(this);
             if (result != null)
             {
                 _wavFileSplitter.GetWavHeader(result, text => textOutput.Text = text);
@@ -94,7 +94,7 @@ namespace SimpleWavSplitter.Avalonia
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.AllowMultiple = true;
 
-            var result = await dlg.ShowAsync();
+            var result = await dlg.ShowAsync(this);
             if (result != null)
             {
                 await _wavFileSplitter.SplitWavFiles(
