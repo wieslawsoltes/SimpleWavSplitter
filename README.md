@@ -16,8 +16,8 @@ Split multi-channel WAV files into single channel WAV files.
 
 | Platforn                               | Type        | Version       | Download                                                                                                                                                                  |
 |----------------------------------------|-------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Windows/Linux/OSX (GUI)                | Portable    | 0.3.4         | [SimpleWavSplitter.Avalonia-Release-0.3.4.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.4/SimpleWavSplitter.Avalonia-Release-0.3.4.zip)   |
-| Windows/Linux/OSX (Console)            | Portable    | 0.3.4         | [SimpleWavSplitter.Console-Release-0.3.4.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.3.4/SimpleWavSplitter.Console-Release-0.3.4.zip)     |
+| Windows/Linux/OSX (GUI)                | Portable    | 0.8.0         | [SimpleWavSplitter.Avalonia-Release-0.8.0.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.8.0/SimpleWavSplitter.Avalonia-Release-0.8.0.zip)   |
+| Windows/Linux/OSX (Console)            | Portable    | 0.8.0         | [SimpleWavSplitter.Console-Release-0.8.0.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.8.0/SimpleWavSplitter.Console-Release-0.8.0.zip)     |
 
 ### Mirrors
 
