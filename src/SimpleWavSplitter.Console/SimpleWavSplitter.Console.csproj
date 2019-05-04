@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0;net461</TargetFramework>
+    <TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
