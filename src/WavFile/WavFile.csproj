@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <PackageId>WavFile</PackageId>
     <Description>Split multi-channel WAV files into single channel WAV files.</Description>
     <PackageTags>Wav;Audio;Splitter;Multi-channel;Managed;C#</PackageTags>
   </PropertyGroup>
