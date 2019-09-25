@@ -29,12 +29,14 @@ namespace SimpleWavSplitter.Avalonia
             => AppBuilder.Configure<App>()
                          .UsePlatformDetect()
                          .LogToDebug();
+
         /// <inheritdoc/>
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
         }
 
+        /// <inheritdoc/>
         public override void OnFrameworkInitializationCompleted()
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
