@@ -1,8 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Diagnostics;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
 
@@ -13,11 +12,13 @@ namespace SimpleWavSplitter.Avalonia
     /// </summary>
     public class App : Application
     {
-        /// <inheritdoc/>
-        public override void Initialize()
+        /// <summary>
+        /// Program entry point.
+        /// </summary>
+        /// <param name="args">The program arguments.</param>
+        static void Main(string[] args)
         {
-            AvaloniaXamlLoader.Load(this);
-            base.Initialize();
+            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }
 
         /// <summary>
@@ -28,25 +29,23 @@ namespace SimpleWavSplitter.Avalonia
             => AppBuilder.Configure<App>()
                          .UsePlatformDetect()
                          .LogToDebug();
-
-        /// <summary>
-        /// Program entry point.
-        /// </summary>
-        /// <param name="args">The program arguments.</param>
-        static void Main(string[] args)
+        /// <inheritdoc/>
+        public override void Initialize()
         {
-            BuildAvaloniaApp().Start<MainWindow>();
+            AvaloniaXamlLoader.Load(this);
         }
 
-        /// <summary>
-        /// Attaches development tools to window in debug mode.
-        /// </summary>
-        /// <param name="window">The window to attach development tools.</param>
-        public static void AttachDevTools(Window window)
+        public override void OnFrameworkInitializationCompleted()
         {
-#if DEBUG
-            DevTools.Attach(window);
-#endif
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+            {
+                desktopLifetime.MainWindow = new MainWindow();
+            }
+            else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
+            {
+                //singleViewLifetime.MainView = new MainView();
+            }
+            base.OnFrameworkInitializationCompleted();
         }
     }
 }
