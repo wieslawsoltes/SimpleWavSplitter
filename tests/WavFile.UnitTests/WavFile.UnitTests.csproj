@@ -5,8 +5,10 @@
     <OutputType>Library</OutputType>
     <LangVersion>latest</LangVersion>
     <IsPackable>False</IsPackable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <Import Project="..\..\build\Base.props" />
   <Import Project="..\..\build\XUnit.props" />
 
   <ItemGroup>

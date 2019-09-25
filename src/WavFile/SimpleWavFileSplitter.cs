@@ -15,7 +15,7 @@ namespace WavFile
     /// </summary>
     public class SimpleWavFileSplitter
     {
-        private CancellationTokenSource _tokenSource;
+        private CancellationTokenSource? _tokenSource;
 
         /// <summary>
         /// Get WAV file header.

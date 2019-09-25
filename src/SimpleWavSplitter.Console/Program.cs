@@ -37,7 +37,7 @@ namespace SimpleWavSplitter.Console
                 WriteLine(
                     string.Format(
                         "SimpleWavSplitterConsole v{0}.{1}.{2}",
-                        v.Major, v.Minor, v.Build));
+                        v?.Major, v?.Minor, v?.Build));
                 Write(Environment.NewLine);
                 WriteLine("Usage:");
                 WriteLine("SimpleWavSplitter.Console <file.wav> [<OutputPath>]");

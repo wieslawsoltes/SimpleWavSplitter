@@ -42,7 +42,7 @@ namespace SimpleWavSplitter.Avalonia
             textOutput = this.FindControl<TextBox>("textOutput");
 
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            Title = string.Format("SimpleWavSplitter v{0}.{1}.{2}", version.Major, version.Minor, version.Build);
+            Title = string.Format("SimpleWavSplitter v{0}.{1}.{2}", version?.Major, version?.Minor, version?.Build);
 
             btnBrowseOutputPath.Click += async (sender, e) => await GetOutputPath();
             btnGetWavHeader.Click += async (sender, e) => await GetWavHeader();
