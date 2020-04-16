@@ -5,6 +5,7 @@
 [![Build status](https://dev.azure.com/wieslawsoltes/GitHub/_apis/build/status/Sources/SimpleWavSplitter)](https://dev.azure.com/wieslawsoltes/GitHub/_build/latest?definitionId=60)
 
 [![NuGet](https://img.shields.io/nuget/v/WavFile.svg)](https://www.nuget.org/packages/WavFile)
+[![NuGet](https://img.shields.io/nuget/dt/WavFile.svg)](https://www.nuget.org/packages/WavFile)
 [![MyGet](https://img.shields.io/myget/simplewavsplitter-nightly/vpre/WavFile.svg?label=myget)](https://www.myget.org/gallery/simplewavsplitter-nightly) 
 
 Split multi-channel WAV files into single channel WAV files.
