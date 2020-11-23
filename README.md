@@ -30,7 +30,7 @@ SimpleWavSplitter is delivered as a NuGet package.
 
 You can find the package on [NuGet](https://www.nuget.org/packages/WavFile/) or by using nightly build feed:
 * Add `https://www.myget.org/F/simplewavsplitter-nightly/api/v2` to your package sources
-* Alternative nightly build feed `https://pkgs.dev.azure.com/wieslawsoltes/GitHub/_packaging/CI/nuget/v3/index.json`
+* Alternative nightly build feed `https://pkgs.dev.azure.com/wieslawsoltes/GitHub/_packaging/Nightly/nuget/v3/index.json`
 * Update your package using `WavFile` feed
 
 You can install the package like this:
