@@ -13,17 +13,6 @@ Split multi-channel WAV files into single channel WAV files.
 * To build program use Microsoft Visual C# 2017.
 * Download are available at: https://github.com/wieslawsoltes/SimpleWavSplitter
 
-### Download
-
-| Platforn                               | Type        | Version       | Download                                                                                                                                                                  |
-|----------------------------------------|-------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Windows/Linux/OSX (GUI)                | Portable    | 0.8.0         | [SimpleWavSplitter.Avalonia-Release-0.8.0.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.8.0/SimpleWavSplitter.Avalonia-Release-0.8.0.zip)   |
-| Windows/Linux/OSX (Console)            | Portable    | 0.8.0         | [SimpleWavSplitter.Console-Release-0.8.0.zip](https://github.com/wieslawsoltes/SimpleWavSplitter/releases/download/0.8.0/SimpleWavSplitter.Console-Release-0.8.0.zip)     |
-
-### Mirrors
-
-[![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-Editors-Recorders/SimpleWavSplitter.shtml)
-
 ## NuGet
 
 SimpleWavSplitter is delivered as a NuGet package.
@@ -36,16 +25,6 @@ You can find the package on [NuGet](https://www.nuget.org/packages/WavFile/) or 
 You can install the package like this:
 
 `Install-Package WavFile -Pre`
-
-### Package Dependencies
-
-Does not require any external dependencies.
-
-### Package Sources
-
-* https://api.nuget.org/v3/index.json
-* https://www.myget.org/F/simplewavsplitter-nightly/api/v2
-* https://pkgs.dev.azure.com/wieslawsoltes/GitHub/_packaging/CI/nuget/v3/index.json
 
 ## Resources
 
