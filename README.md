@@ -2,7 +2,8 @@
 
 [![Gitter](https://badges.gitter.im/wieslawsoltes/SimpleWavSplitter.svg)](https://gitter.im/wieslawsoltes/SimpleWavSplitter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-[![Build status](https://dev.azure.com/wieslawsoltes/GitHub/_apis/build/status/Sources/SimpleWavSplitter)](https://dev.azure.com/wieslawsoltes/GitHub/_build/latest?definitionId=60)
+[![Build Status](https://dev.azure.com/wieslawsoltes/GitHub/_apis/build/status/wieslawsoltes.SimpleWavSplitter?branchName=master)](https://dev.azure.com/wieslawsoltes/GitHub/_build/latest?definitionId=99&branchName=master)
+[![CI](https://github.com/wieslawsoltes/SimpleWavSplitter/actions/workflows/build.yml/badge.svg)](https://github.com/wieslawsoltes/SimpleWavSplitter/actions/workflows/build.yml)
 
 [![NuGet](https://img.shields.io/nuget/v/WavFile.svg)](https://www.nuget.org/packages/WavFile)
 [![NuGet](https://img.shields.io/nuget/dt/WavFile.svg)](https://www.nuget.org/packages/WavFile)
