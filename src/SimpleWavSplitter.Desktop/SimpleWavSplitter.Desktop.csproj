@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <IsPackable>False</IsPackable>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SimpleWavSplitter.Desktop</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SimpleWavSplitter.Desktop</PackageId>
+    <Description>Split multi-channel WAV files into single channel WAV files.</Description>
+    <PackageTags>Wav;Audio;Splitter;Multi-channel;Managed;C#;Avalonia</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishTrimmed>False</PublishTrimmed>
+    <PublishSingleFile>False</PublishSingleFile>
+    <PublishReadyToRun>True</PublishReadyToRun>
+  </PropertyGroup>
+
+  <Import Project="..\..\build\Base.props" />
+  <Import Project="..\..\build\ReferenceAssemblies.props" />
+  <Import Project="..\..\build\Avalonia.props" />
+  <Import Project="..\..\build\Avalonia.Desktop.props" />
+  <Import Project="..\..\build\Avalonia.Diagnostics.props" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleWavSplitter.Base\SimpleWavSplitter.Base.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WavFile", "src\WavFile\WavF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWavSplitter.Console", "src\SimpleWavSplitter.Console\SimpleWavSplitter.Console.csproj", "{0DB24D15-3920-44C4-83FA-89D0F7565E42}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWavSplitter.Avalonia", "src\SimpleWavSplitter.Avalonia\SimpleWavSplitter.Avalonia.csproj", "{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWavSplitter.Base", "src\SimpleWavSplitter.Base\SimpleWavSplitter.Base.csproj", "{FFECA3C3-2785-4AAC-B9DE-5FA47415444F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}"
 EndProject
@@ -56,6 +56,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1ACCC200
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WavFile.UnitTests", "tests\WavFile.UnitTests\WavFile.UnitTests.csproj", "{D0092F14-0394-41B7-A9A2-A3C3E51C02A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Desktop", "src\SimpleWavSplitter.Desktop\SimpleWavSplitter.Desktop.csproj", "{2310F8B4-F8BC-48BC-99E8-9E217791AFCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{D0092F14-0394-41B7-A9A2-A3C3E51C02A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0092F14-0394-41B7-A9A2-A3C3E51C02A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0092F14-0394-41B7-A9A2-A3C3E51C02A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2310F8B4-F8BC-48BC-99E8-9E217791AFCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2310F8B4-F8BC-48BC-99E8-9E217791AFCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2310F8B4-F8BC-48BC-99E8-9E217791AFCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2310F8B4-F8BC-48BC-99E8-9E217791AFCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{335EB7D0-D585-4FC2-BDC9-451EA7780FF1} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
 		{E25E3DD5-6313-4DDC-90F0-587657EF0950} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
 		{D0092F14-0394-41B7-A9A2-A3C3E51C02A5} = {1ACCC200-FC4E-4E77-ADC8-547C39CDD0D7}
+		{2310F8B4-F8BC-48BC-99E8-9E217791AFCE} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4194A594-1463-4823-8A28-CBBE8B416F46}

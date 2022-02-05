@@ -1,0 +1,10 @@
+﻿<Window x:Class="SimpleWavSplitter.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:SimpleWavSplitter"
+        Title="SimpleWavSplitter"
+        Height="510" Width="700"
+        WindowStartupLocation="CenterScreen" WindowState="Normal"
+        UseLayoutRounding="True">
+  <local:MainView />
+</Window>

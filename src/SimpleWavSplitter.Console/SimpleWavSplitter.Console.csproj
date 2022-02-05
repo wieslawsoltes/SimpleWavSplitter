@@ -4,7 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <IsPackable>False</IsPackable>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -17,10 +16,6 @@
 
   <Import Project="..\..\build\Base.props" />
   <Import Project="..\..\build\ReferenceAssemblies.props" />
-
-  <ItemGroup>
-    <Compile Include="**\*.cs" Exclude="obj\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WavFile\WavFile.csproj" />
