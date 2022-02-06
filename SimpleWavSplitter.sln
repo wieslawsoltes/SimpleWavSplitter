@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{335EB7D0
 		build\System.IO.FileSystem.props = build\System.IO.FileSystem.props
 		build\XUnit.props = build\XUnit.props
 		build\SourceLink.props = build\SourceLink.props
+		build\Avalonia.Web.Blazor.props = build\Avalonia.Web.Blazor.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{305D7F58-9B4A-4841-9EF1-BB279EF56995}"
@@ -57,6 +58,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WavFile.UnitTests", "tests\WavFile.UnitTests\WavFile.UnitTests.csproj", "{D0092F14-0394-41B7-A9A2-A3C3E51C02A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Desktop", "src\SimpleWavSplitter.Desktop\SimpleWavSplitter.Desktop.csproj", "{2310F8B4-F8BC-48BC-99E8-9E217791AFCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWavSplitter.Web", "src\SimpleWavSplitter.Web\SimpleWavSplitter.Web.csproj", "{DEFA44B2-983D-4BC1-A275-280A995F22CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +91,10 @@ Global
 		{2310F8B4-F8BC-48BC-99E8-9E217791AFCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2310F8B4-F8BC-48BC-99E8-9E217791AFCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2310F8B4-F8BC-48BC-99E8-9E217791AFCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEFA44B2-983D-4BC1-A275-280A995F22CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEFA44B2-983D-4BC1-A275-280A995F22CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEFA44B2-983D-4BC1-A275-280A995F22CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEFA44B2-983D-4BC1-A275-280A995F22CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,6 +109,7 @@ Global
 		{E25E3DD5-6313-4DDC-90F0-587657EF0950} = {2C2B9DE5-D2CC-4464-8660-2D2F5590C396}
 		{D0092F14-0394-41B7-A9A2-A3C3E51C02A5} = {1ACCC200-FC4E-4E77-ADC8-547C39CDD0D7}
 		{2310F8B4-F8BC-48BC-99E8-9E217791AFCE} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
+		{DEFA44B2-983D-4BC1-A275-280A995F22CD} = {4E9F76C0-2C43-4BEC-91D3-9F76936EB77F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4194A594-1463-4823-8A28-CBBE8B416F46}
